@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Operacional - Alhandra PB</title>
-  <!-- Chart.js para os gráficos interativos -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
@@ -14,7 +13,6 @@
       --accent-blue: #2563eb;
       --accent-green: #10b981;
       --accent-orange: #f59e0b;
-      --accent-red: #ef4444;
       --text: #334155;
       --border: #e2e8f0;
     }
@@ -32,25 +30,57 @@
       margin: 0 auto;
     }
 
-    .header {
+    /* Cabeçalho e Barra do Filtro */
+    .header-bar {
       background: linear-gradient(135deg, #1e293b, #0f172a);
       color: #fff;
       padding: 20px 24px;
       border-radius: 12px;
       margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
 
-    .header h1 {
+    .header-info h1 {
       margin: 0;
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       font-weight: 600;
     }
 
-    .header p {
+    .header-info p {
       margin: 4px 0 0 0;
       opacity: 0.8;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
+    }
+
+    /* Select de Mês */
+    .filter-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 8px 16px;
+      border-radius: 8px;
+    }
+
+    .filter-container label {
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    select {
+      background: #ffffff;
+      color: var(--primary);
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      outline: none;
     }
 
     /* Cards KPI */
@@ -67,11 +97,6 @@
       padding: 20px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
       border-top: 4px solid var(--accent-blue);
-      transition: transform 0.2s ease;
-    }
-
-    .kpi-card:hover {
-      transform: translateY(-3px);
     }
 
     .kpi-card.green { border-top-color: var(--accent-green); }
@@ -82,7 +107,6 @@
       color: #64748b;
       text-transform: uppercase;
       font-weight: 700;
-      letter-spacing: 0.5px;
     }
 
     .kpi-value {
@@ -92,7 +116,7 @@
       margin-top: 8px;
     }
 
-    /* Layout em Grade para Gráficos */
+    /* Gráficos */
     .charts-grid {
       display: grid;
       grid-template-columns: 2fr 1fr;
@@ -113,12 +137,12 @@
 
     .chart-card h3 {
       margin-top: 0;
-      font-size: 1rem;
+      font-size: 0.95rem;
       color: var(--primary);
       margin-bottom: 16px;
     }
 
-    /* Tabela Estilizada */
+    /* Tabela */
     .table-card {
       background: var(--card-bg);
       border-radius: 12px;
@@ -155,10 +179,6 @@
       color: var(--accent-blue);
     }
 
-    tr:hover:not(.category-header) {
-      background-color: #f8fafc;
-    }
-
     .text-center { text-align: center; }
     .text-right { text-align: right; }
   </style>
@@ -167,29 +187,39 @@
 
 <div class="dashboard">
 
-  <!-- CABEÇALHO -->
-  <div class="header">
-    <h1>Movimentações da Operação</h1>
-    <p>Operação Alhandra - PB | Fechamento Mês 08/2026</p>
+  <!-- BARRA SUPERIOR COM FILTRO -->
+  <div class="header-bar">
+    <div class="header-info">
+      <h1>Movimentações da Operação</h1>
+      <p>Operação Alhandra - PB</p>
+    </div>
+    <div class="filter-container">
+      <label for="monthSelect">Selecione o Mês:</label>
+      <select id="monthSelect" onchange="updateDashboard(this.value)">
+        <option value="08/2026" selected>08/2026 (Agosto)</option>
+        <option value="07/2026">07/2026 (Julho)</option>
+        <option value="06/2026">06/2026 (Junho)</option>
+      </select>
+    </div>
   </div>
 
   <!-- CARDS KPI -->
   <div class="kpi-grid">
     <div class="kpi-card">
       <div class="kpi-title">Total de Peças</div>
-      <div class="kpi-value">35.923</div>
+      <div class="kpi-value" id="kpiPecas">0</div>
     </div>
     <div class="kpi-card green">
       <div class="kpi-title">Total de Transportes</div>
-      <div class="kpi-value">427</div>
+      <div class="kpi-value" id="kpiTransportes">0</div>
     </div>
     <div class="kpi-card orange">
       <div class="kpi-title">Devoluções (Peças)</div>
-      <div class="kpi-value">657</div>
+      <div class="kpi-value" id="kpiDevolucoes">0</div>
     </div>
   </div>
 
-  <!-- GRÁFICOS INTERATIVOS -->
+  <!-- GRÁFICOS -->
   <div class="charts-grid">
     <div class="chart-card">
       <h3>Volume de Peças por Categoria</h3>
@@ -201,7 +231,7 @@
     </div>
   </div>
 
-  <!-- TABELA DE DADOS -->
+  <!-- TABELA -->
   <div class="table-card">
     <h3>Detalhamento das Operações</h3>
     <table>
@@ -212,63 +242,136 @@
           <th class="text-right">Total de Peças</th>
         </tr>
       </thead>
-      <tbody>
-        <tr class="category-header"><td colspan="3">Expedições</td></tr>
-        <tr><td style="padding-left: 32px;">P.A</td><td class="text-center">234</td><td class="text-right">15.573</td></tr>
-        <tr><td style="padding-left: 32px;">Malhas Peças</td><td class="text-center">4</td><td class="text-right">172</td></tr>
-
-        <tr class="category-header"><td colspan="3">Recebimentos</td></tr>
-        <tr><td style="padding-left: 32px;">P.A</td><td class="text-center">181</td><td class="text-right">19.189</td></tr>
-        <tr><td style="padding-left: 32px;">Peças</td><td class="text-center">2</td><td class="text-right">332</td></tr>
-
-        <tr class="category-header"><td colspan="3">Devolução Cliente</td></tr>
-        <tr><td style="padding-left: 32px;">P.A</td><td class="text-center">4</td><td class="text-right">404</td></tr>
-
-        <tr class="category-header"><td colspan="3">Devolução Planta</td></tr>
-        <tr><td style="padding-left: 32px;">P.A</td><td class="text-center">3</td><td class="text-right">253</td></tr>
-      </tbody>
+      <tbody id="tableBody"></tbody>
     </table>
   </div>
 
 </div>
 
-<!-- SCRIPT DOS GRÁFICOS -->
 <script>
-  // Gráfico de Barras - Peças
-  const ctxBar = document.getElementById('barChart').getContext('2d');
-  new Chart(ctxBar, {
-    type: 'bar',
-    data: {
-      labels: ['Expedição P.A', 'Expedição Malhas', 'Recebimento P.A', 'Recebimento Peças', 'Dev. Cliente P.A', 'Dev. Planta P.A'],
-      datasets: [{
-        label: 'Total de Peças',
-        data: [15573, 172, 19189, 332, 404, 253],
-        backgroundColor: ['#2563eb', '#60a5fa', '#10b981', '#34d399', '#f59e0b', '#ef4444'],
-        borderRadius: 6
-      }]
+  // BANCO DE DADOS DOS MESES (Adicione novos meses aqui!)
+  const database = {
+    "08/2026": {
+      kpi: { pecas: "35.923", transportes: "427", devolucoes: "657" },
+      pecasArray: [15573, 172, 19189, 332, 404, 253],
+      transportesArray: [238, 183, 4, 3], // Expedição, Recebimento, Dev. Cliente, Dev. Planta
+      table: [
+        { cat: "Expedições", isHeader: true },
+        { name: "P.A", t: "234", p: "15.573" },
+        { name: "Malhas Peças", t: "4", p: "172" },
+        { cat: "Recebimentos", isHeader: true },
+        { name: "P.A", t: "181", p: "19.189" },
+        { name: "Peças", t: "2", p: "332" },
+        { cat: "Devolução Cliente", isHeader: true },
+        { name: "P.A", t: "4", p: "404" },
+        { cat: "Devolução Planta", isHeader: true },
+        { name: "P.A", t: "3", p: "253" }
+      ]
     },
-    options: {
-      responsive: true,
-      plugins: { legend: { display: false } }
+    "07/2026": {
+      kpi: { pecas: "28.450", transportes: "390", devolucoes: "410" },
+      pecasArray: [12000, 150, 15000, 200, 250, 160],
+      transportesArray: [210, 160, 3, 2],
+      table: [
+        { cat: "Expedições", isHeader: true },
+        { name: "P.A", t: "206", p: "12.000" },
+        { name: "Malhas Peças", t: "4", p: "150" },
+        { cat: "Recebimentos", isHeader: true },
+        { name: "P.A", t: "158", p: "15.000" },
+        { name: "Peças", t: "2", p: "200" },
+        { cat: "Devolução Cliente", isHeader: true },
+        { name: "P.A", t: "3", p: "250" },
+        { cat: "Devolução Planta", isHeader: true },
+        { name: "P.A", t: "2", p: "160" }
+      ]
+    },
+    "06/2026": {
+      kpi: { pecas: "31.100", transportes: "405", devolucoes: "520" },
+      pecasArray: [14000, 160, 16000, 250, 300, 220],
+      transportesArray: [220, 170, 5, 4],
+      table: [
+        { cat: "Expedições", isHeader: true },
+        { name: "P.A", t: "215", p: "14.000" },
+        { name: "Malhas Peças", t: "5", p: "160" },
+        { cat: "Recebimentos", isHeader: true },
+        { name: "P.A", t: "167", p: "16.000" },
+        { name: "Peças", t: "3", p: "250" },
+        { cat: "Devolução Cliente", isHeader: true },
+        { name: "P.A", t: "5", p: "300" },
+        { cat: "Devolução Planta", isHeader: true },
+        { name: "P.A", t: "4", p: "220" }
+      ]
     }
-  });
+  };
 
-  // Gráfico de Rosca - Transportes
-  const ctxDoughnut = document.getElementById('doughnutChart').getContext('2d');
-  new Chart(ctxDoughnut, {
-    type: 'doughnut',
-    data: {
-      labels: ['Expedições', 'Recebimentos', 'Dev. Cliente', 'Dev. Planta'],
-      datasets: [{
-        data: [238, 183, 4, 3],
-        backgroundColor: ['#2563eb', '#10b981', '#f59e0b', '#ef4444']
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: { legend: { position: 'bottom' } }
-    }
-  });
+  let barChart, doughnutChart;
+
+  function initCharts() {
+    const ctxBar = document.getElementById('barChart').getContext('2d');
+    barChart = new Chart(ctxBar, {
+      type: 'bar',
+      data: {
+        labels: ['Expedição P.A', 'Expedição Malhas', 'Recebimento P.A', 'Recebimento Peças', 'Dev. Cliente P.A', 'Dev. Planta P.A'],
+        datasets: [{
+          label: 'Total de Peças',
+          data: [],
+          backgroundColor: ['#2563eb', '#60a5fa', '#10b981', '#34d399', '#f59e0b', '#ef4444'],
+          borderRadius: 6
+        }]
+      },
+      options: { responsive: true, plugins: { legend: { display: false } } }
+    });
+
+    const ctxDoughnut = document.getElementById('doughnutChart').getContext('2d');
+    doughnutChart = new Chart(ctxDoughnut, {
+      type: 'doughnut',
+      data: {
+        labels: ['Expedições', 'Recebimentos', 'Dev. Cliente', 'Dev. Planta'],
+        datasets: [{
+          data: [],
+          backgroundColor: ['#2563eb', '#10b981', '#f59e0b', '#ef4444']
+        }]
+      },
+      options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+    });
+  }
+
+  function updateDashboard(month) {
+    const data = database[month];
+    if (!data) return;
+
+    // Atualizar KPIs
+    document.getElementById('kpiPecas').innerText = data.kpi.pecas;
+    document.getElementById('kpiTransportes').innerText = data.kpi.transportes;
+    document.getElementById('kpiDevolucoes').innerText = data.kpi.devolucoes;
+
+    // Atualizar Gráficos
+    barChart.data.datasets[0].data = data.pecasArray;
+    barChart.update();
+
+    doughnutChart.data.datasets[0].data = data.transportesArray;
+    doughnutChart.update();
+
+    // Atualizar Tabela
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '';
+    data.table.forEach(row => {
+      if (row.isHeader) {
+        tbody.innerHTML += `<tr class="category-header"><td colspan="3">${row.cat}</td></tr>`;
+      } else {
+        tbody.innerHTML += `
+          <tr>
+            <td style="padding-left: 32px;">${row.name}</td>
+            <td class="text-center">${row.t}</td>
+            <td class="text-right">${row.p}</td>
+          </tr>`;
+      }
+    });
+  }
+
+  // Inicializa tela no mês selecionado
+  initCharts();
+  updateDashboard('08/2026');
 </script>
 
 </body>
