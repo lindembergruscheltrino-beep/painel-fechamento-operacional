@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Operacional - Alhandra PB</title>
-  <!-- Importação das fontes Google Sans Code / Space Mono para o estilo Mono moderno -->
   <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Mono:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -110,12 +109,20 @@
       color: var(--text-main);
     }
 
-    /* KPIS GRID DE 6 CARDS */
+    /* KPIS GRID - 3 COLUNAS PERFEITAS (2 LINHAS DE 3) */
     .kpi-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(3, 1fr);
       gap: 16px;
       margin-bottom: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 600px) {
+      .kpi-grid { grid-template-columns: 1fr; }
     }
 
     .kpi-card {
@@ -155,6 +162,85 @@
     .kpi-sub {
       font-size: 0.7rem;
       color: var(--text-muted);
+    }
+
+    /* SEÇÃO DE ROLAGEM HORIZONTAL (FAMÍLIAS - SAÍDAS) */
+    .scroll-container-wrapper {
+      margin-bottom: 24px;
+    }
+
+    .scroll-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .families-scroll-container {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--accent-purple) rgba(255, 255, 255, 0.05);
+    }
+
+    .families-scroll-container::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .families-scroll-container::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+    }
+
+    .families-scroll-container::-webkit-scrollbar-thumb {
+      background: var(--accent-purple);
+      border-radius: 10px;
+    }
+
+    .family-chip {
+      flex: 0 0 auto;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 10px 14px;
+      min-width: 150px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .chip-name {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .chip-values {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .chip-qty {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .chip-pct {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent-purple);
+      background: rgba(139, 92, 246, 0.15);
+      padding: 2px 6px;
+      border-radius: 4px;
     }
 
     /* SEÇÕES COMPARATIVAS */
@@ -296,7 +382,7 @@
     </div>
   </div>
 
-  <!-- CARDS KPIS INDIVIDUAIS -->
+  <!-- CARDS KPIS INDIVIDUAIS (GRID 3x2 PERFEITO) -->
   <div class="kpi-grid">
     <div class="kpi-card glass-card green">
       <div class="kpi-title">Total Recebimentos</div>
@@ -327,6 +413,100 @@
       <div class="kpi-title">Devolução Planta</div>
       <div class="kpi-value">253</div>
       <div class="kpi-sub">Volume de Processo</div>
+    </div>
+  </div>
+
+  <!-- ROLAGEM HORIZONTAL - SAÍDAS POR FAMÍLIA -->
+  <div class="glass-card scroll-container-wrapper">
+    <div class="scroll-title">
+      <div class="dot" style="background: var(--accent-purple)"></div>
+      Representatividade de Saídas por Família de Produtos
+    </div>
+    <div class="families-scroll-container">
+      <div class="family-chip">
+        <span class="chip-name">Refrigerador</span>
+        <div class="chip-values">
+          <span class="chip-qty">7.998</span>
+          <span class="chip-pct">51,36%</span>
+        </div>
+      </div>
+      <div class="family-chip">
+        <span class="chip-name">Lavadora</span>
+        <div class="chip-values">
+          <span class="chip-qty">3.118</span>
+          <span class="chip-pct">20,02%</span>
+        </div>
+      </div>
+      <div class="family-chip">
+        <span class="chip-name">Fogão</span>
+        <div class="chip-values">
+          <span class="chip-qty">1.753</span>
+          <span class="chip-pct">11,26%</span>
+        </div>
+      </div>
+      <div class="family-chip">
+        <span class="chip-name">Freezer</span>
+        <div class="chip-values">
+          <span class="chip-qty">1.068</span>
+          <span class="chip-pct">6,86%</span>
+        </div>
+      </div>
+      <div class="family-chip">
+        <span class="chip-name">M.Ondas</span>
+        <div class="chip-values">
+          <span class="chip-qty">441</span>
+          <span class="chip-pct">2,83%</span>
+        </div>
+      </div>
+      <div class="family-chip">
+        <span class="chip-name">L.Louça</span>
+        <div class="chip-values">
+          <span class="chip-qty">328</span>
+          <span class="chip-pct">2,11%</span>
+        </div>
+      </div>
+      <div class="family-chip">
+        <span class="chip-name">Forno</span>
+        <div class="chip-values">
+          <span class="chip-qty">293</span>
+          <span class="chip-pct">1,88%</span>
+        </div>
+      </div>
+      <div class="family-chip">
+        <span class="chip-name">Cooktop</span>
+        <div class="chip-values">
+          <span class="chip-qty">226</span>
+          <span class="chip-pct">1,45%</span>
+        </div>
+      </div>
+      <div class="family-chip">
+        <span class="chip-name">Frigobar</span>
+        <div class="chip-values">
+          <span class="chip-qty">178</span>
+          <span class="chip-pct">1,14%</span>
+        </div>
+      </div>
+      <div class="family-chip">
+        <span class="chip-name">Cervejeira</span>
+        <div class="chip-values">
+          <span class="chip-qty">93</span>
+          <span class="chip-pct">0,60%</span>
+        </div>
+      </div>
+      <div class="family-chip">
+        <span class="chip-name">Arcondicionado</span>
+        <div class="chip-values">
+          <span class="chip-qty">61</span>
+          <span class="chip-pct">0,39%</span>
+        </div>
+      </div>
+      <div class="family-chip">
+        <span class="chip-name">Secadora</span>
+        <div class="chip-values">
+          <span class="chip-qty">16</span>
+          <span class="chip-pct">0,10%</span>
+        </div>
+      </div>
     </div>
   </div>
 
