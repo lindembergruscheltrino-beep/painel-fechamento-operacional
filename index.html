@@ -58,7 +58,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
       flex-wrap: wrap;
       gap: 16px;
     }
@@ -109,7 +109,58 @@
       color: var(--text-main);
     }
 
-    /* KPIS GRID - 3 COLUNAS PERFEITAS (2 LINHAS DE 3) */
+    /* ESTILO FITA DE MERCADO / TICKER BAR */
+    .ticker-wrapper {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 24px;
+      white-space: nowrap;
+      position: relative;
+    }
+
+    .ticker-track {
+      display: inline-flex;
+      align-items: center;
+      animation: marquee 35s linear infinite;
+    }
+
+    .ticker-wrapper:hover .ticker-track {
+      animation-play-state: paused;
+    }
+
+    .ticker-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-right: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.85rem;
+    }
+
+    .ticker-label {
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .ticker-value {
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .ticker-pct {
+      font-weight: 700;
+      color: #34d399;
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* KPIS GRID DE 6 CARDS */
     .kpi-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -162,85 +213,6 @@
     .kpi-sub {
       font-size: 0.7rem;
       color: var(--text-muted);
-    }
-
-    /* SEÇÃO DE ROLAGEM HORIZONTAL (FAMÍLIAS - SAÍDAS) */
-    .scroll-container-wrapper {
-      margin-bottom: 24px;
-    }
-
-    .scroll-title {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .families-scroll-container {
-      display: flex;
-      gap: 12px;
-      overflow-x: auto;
-      padding-bottom: 8px;
-      scrollbar-width: thin;
-      scrollbar-color: var(--accent-purple) rgba(255, 255, 255, 0.05);
-    }
-
-    .families-scroll-container::-webkit-scrollbar {
-      height: 6px;
-    }
-
-    .families-scroll-container::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 10px;
-    }
-
-    .families-scroll-container::-webkit-scrollbar-thumb {
-      background: var(--accent-purple);
-      border-radius: 10px;
-    }
-
-    .family-chip {
-      flex: 0 0 auto;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 10px 14px;
-      min-width: 150px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .chip-name {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      font-weight: 600;
-    }
-
-    .chip-values {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 8px;
-    }
-
-    .chip-qty {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--text-main);
-    }
-
-    .chip-pct {
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--accent-purple);
-      background: rgba(139, 92, 246, 0.15);
-      padding: 2px 6px;
-      border-radius: 4px;
     }
 
     /* SEÇÕES COMPARATIVAS */
@@ -309,7 +281,6 @@
       color: var(--accent-purple);
     }
 
-    /* BADGES DE SALDO */
     .badge-saldo-pos {
       background: rgba(16, 185, 129, 0.15);
       color: #34d399;
@@ -382,7 +353,40 @@
     </div>
   </div>
 
-  <!-- CARDS KPIS INDIVIDUAIS (GRID 3x2 PERFEITO) -->
+  <!-- FITA DE COTAÇÕES ESTILO MERCADO FINANCEIRO (TICKER BAR) -->
+  <div class="ticker-wrapper">
+    <div class="ticker-track">
+      <!-- Bloco 1 -->
+      <div class="ticker-item"><span class="ticker-label">REFRIGERADOR</span> <span class="ticker-value">7.998 un</span> <span class="ticker-pct">51,36%</span></div>
+      <div class="ticker-item"><span class="ticker-label">LAVADORA</span> <span class="ticker-value">3.118 un</span> <span class="ticker-pct">20,02%</span></div>
+      <div class="ticker-item"><span class="ticker-label">FOGÃO</span> <span class="ticker-value">1.753 un</span> <span class="ticker-pct">11,26%</span></div>
+      <div class="ticker-item"><span class="ticker-label">FREEZER</span> <span class="ticker-value">1.068 un</span> <span class="ticker-pct">6,86%</span></div>
+      <div class="ticker-item"><span class="ticker-label">M.ONDAS</span> <span class="ticker-value">441 un</span> <span class="ticker-pct">2,83%</span></div>
+      <div class="ticker-item"><span class="ticker-label">L.LOUÇA</span> <span class="ticker-value">328 un</span> <span class="ticker-pct">2,11%</span></div>
+      <div class="ticker-item"><span class="ticker-label">FORNO</span> <span class="ticker-value">293 un</span> <span class="ticker-pct">1,88%</span></div>
+      <div class="ticker-item"><span class="ticker-label">COOKTOP</span> <span class="ticker-value">226 un</span> <span class="ticker-pct">1,45%</span></div>
+      <div class="ticker-item"><span class="ticker-label">FRIGOBAR</span> <span class="ticker-value">178 un</span> <span class="ticker-pct">1,14%</span></div>
+      <div class="ticker-item"><span class="ticker-label">CERVEJEIRA</span> <span class="ticker-value">93 un</span> <span class="ticker-pct">0,60%</span></div>
+      <div class="ticker-item"><span class="ticker-label">ARCONDICIONADO</span> <span class="ticker-value">61 un</span> <span class="ticker-pct">0,39%</span></div>
+      <div class="ticker-item"><span class="ticker-label">SECADORA</span> <span class="ticker-value">16 un</span> <span class="ticker-pct">0,10%</span></div>
+
+      <!-- Bloco Duplicado para Loop Infinito Perfeito -->
+      <div class="ticker-item"><span class="ticker-label">REFRIGERADOR</span> <span class="ticker-value">7.998 un</span> <span class="ticker-pct">51,36%</span></div>
+      <div class="ticker-item"><span class="ticker-label">LAVADORA</span> <span class="ticker-value">3.118 un</span> <span class="ticker-pct">20,02%</span></div>
+      <div class="ticker-item"><span class="ticker-label">FOGÃO</span> <span class="ticker-value">1.753 un</span> <span class="ticker-pct">11,26%</span></div>
+      <div class="ticker-item"><span class="ticker-label">FREEZER</span> <span class="ticker-value">1.068 un</span> <span class="ticker-pct">6,86%</span></div>
+      <div class="ticker-item"><span class="ticker-label">M.ONDAS</span> <span class="ticker-value">441 un</span> <span class="ticker-pct">2,83%</span></div>
+      <div class="ticker-item"><span class="ticker-label">L.LOUÇA</span> <span class="ticker-value">328 un</span> <span class="ticker-pct">2,11%</span></div>
+      <div class="ticker-item"><span class="ticker-label">FORNO</span> <span class="ticker-value">293 un</span> <span class="ticker-pct">1,88%</span></div>
+      <div class="ticker-item"><span class="ticker-label">COOKTOP</span> <span class="ticker-value">226 un</span> <span class="ticker-pct">1,45%</span></div>
+      <div class="ticker-item"><span class="ticker-label">FRIGOBAR</span> <span class="ticker-value">178 un</span> <span class="ticker-pct">1,14%</span></div>
+      <div class="ticker-item"><span class="ticker-label">CERVEJEIRA</span> <span class="ticker-value">93 un</span> <span class="ticker-pct">0,60%</span></div>
+      <div class="ticker-item"><span class="ticker-label">ARCONDICIONADO</span> <span class="ticker-value">61 un</span> <span class="ticker-pct">0,39%</span></div>
+      <div class="ticker-item"><span class="ticker-label">SECADORA</span> <span class="ticker-value">16 un</span> <span class="ticker-pct">0,10%</span></div>
+    </div>
+  </div>
+
+  <!-- CARDS KPIS INDIVIDUAIS -->
   <div class="kpi-grid">
     <div class="kpi-card glass-card green">
       <div class="kpi-title">Total Recebimentos</div>
@@ -413,100 +417,6 @@
       <div class="kpi-title">Devolução Planta</div>
       <div class="kpi-value">253</div>
       <div class="kpi-sub">Volume de Processo</div>
-    </div>
-  </div>
-
-  <!-- ROLAGEM HORIZONTAL - SAÍDAS POR FAMÍLIA -->
-  <div class="glass-card scroll-container-wrapper">
-    <div class="scroll-title">
-      <div class="dot" style="background: var(--accent-purple)"></div>
-      Representatividade de Saídas por Família de Produtos
-    </div>
-    <div class="families-scroll-container">
-      <div class="family-chip">
-        <span class="chip-name">Refrigerador</span>
-        <div class="chip-values">
-          <span class="chip-qty">7.998</span>
-          <span class="chip-pct">51,36%</span>
-        </div>
-      </div>
-      <div class="family-chip">
-        <span class="chip-name">Lavadora</span>
-        <div class="chip-values">
-          <span class="chip-qty">3.118</span>
-          <span class="chip-pct">20,02%</span>
-        </div>
-      </div>
-      <div class="family-chip">
-        <span class="chip-name">Fogão</span>
-        <div class="chip-values">
-          <span class="chip-qty">1.753</span>
-          <span class="chip-pct">11,26%</span>
-        </div>
-      </div>
-      <div class="family-chip">
-        <span class="chip-name">Freezer</span>
-        <div class="chip-values">
-          <span class="chip-qty">1.068</span>
-          <span class="chip-pct">6,86%</span>
-        </div>
-      </div>
-      <div class="family-chip">
-        <span class="chip-name">M.Ondas</span>
-        <div class="chip-values">
-          <span class="chip-qty">441</span>
-          <span class="chip-pct">2,83%</span>
-        </div>
-      </div>
-      <div class="family-chip">
-        <span class="chip-name">L.Louça</span>
-        <div class="chip-values">
-          <span class="chip-qty">328</span>
-          <span class="chip-pct">2,11%</span>
-        </div>
-      </div>
-      <div class="family-chip">
-        <span class="chip-name">Forno</span>
-        <div class="chip-values">
-          <span class="chip-qty">293</span>
-          <span class="chip-pct">1,88%</span>
-        </div>
-      </div>
-      <div class="family-chip">
-        <span class="chip-name">Cooktop</span>
-        <div class="chip-values">
-          <span class="chip-qty">226</span>
-          <span class="chip-pct">1,45%</span>
-        </div>
-      </div>
-      <div class="family-chip">
-        <span class="chip-name">Frigobar</span>
-        <div class="chip-values">
-          <span class="chip-qty">178</span>
-          <span class="chip-pct">1,14%</span>
-        </div>
-      </div>
-      <div class="family-chip">
-        <span class="chip-name">Cervejeira</span>
-        <div class="chip-values">
-          <span class="chip-qty">93</span>
-          <span class="chip-pct">0,60%</span>
-        </div>
-      </div>
-      <div class="family-chip">
-        <span class="chip-name">Arcondicionado</span>
-        <div class="chip-values">
-          <span class="chip-qty">61</span>
-          <span class="chip-pct">0,39%</span>
-        </div>
-      </div>
-      <div class="family-chip">
-        <span class="chip-name">Secadora</span>
-        <div class="chip-values">
-          <span class="chip-qty">16</span>
-          <span class="chip-pct">0,10%</span>
-        </div>
-      </div>
     </div>
   </div>
 
