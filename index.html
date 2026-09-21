@@ -18,6 +18,7 @@
       --accent-blue: #3b82f6;
       --accent-green: #10b981;
       --accent-orange: #f59e0b;
+      --accent-red: #ef4444;
     }
 
     * {
@@ -107,10 +108,10 @@
       color: var(--text-main);
     }
 
-    /* KPIS GRID */
+    /* KPIS GRID DE 6 CARDS */
     .kpi-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 16px;
       margin-bottom: 24px;
     }
@@ -132,6 +133,8 @@
 
     .kpi-card.green::before { background: linear-gradient(90deg, var(--accent-cyan), var(--accent-green)); }
     .kpi-card.orange::before { background: linear-gradient(90deg, var(--accent-orange), #ef4444); }
+    .kpi-card.red::before { background: linear-gradient(90deg, #ef4444, #f43f5e); }
+    .kpi-card.blue::before { background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan)); }
 
     .kpi-title {
       color: var(--text-muted);
@@ -267,27 +270,37 @@
     </div>
   </div>
 
-  <!-- CARDS KPIS -->
+  <!-- CARDS KPIS INDIVIDUAIS -->
   <div class="kpi-grid">
     <div class="kpi-card glass-card green">
-      <div class="kpi-title">Total Recebimentos (Entradas)</div>
-      <div class="kpi-value" id="kpiEntradas">19.189</div>
-      <div class="kpi-sub">+332 em Malhas Peças (2 Transp.)</div>
+      <div class="kpi-title">Total Recebimentos</div>
+      <div class="kpi-value">19.189</div>
+      <div class="kpi-sub">Total de Entradas (P.A)</div>
     </div>
     <div class="kpi-card glass-card">
-      <div class="kpi-title">Total Expedições (Saídas)</div>
-      <div class="kpi-value" id="kpiSaidas">15.573</div>
-      <div class="kpi-sub">+172 em Malhas Peças (4 Transp.)</div>
+      <div class="kpi-title">Total Expedições</div>
+      <div class="kpi-value">15.573</div>
+      <div class="kpi-sub">Total Saídas (234 Transp.)</div>
     </div>
-    <div class="kpi-card glass-card">
-      <div class="kpi-title">Qtd. Transportes (Saídas)</div>
-      <div class="kpi-value" id="kpiTransportes">234</div>
-      <div class="kpi-sub">Total de transportes de saída</div>
+    <div class="kpi-card glass-card blue">
+      <div class="kpi-title">Malhas Peças (Saída)</div>
+      <div class="kpi-value">172</div>
+      <div class="kpi-sub">Vol. Saída (4 Transp.)</div>
+    </div>
+    <div class="kpi-card glass-card blue">
+      <div class="kpi-title">Malhas Peças (Entrada)</div>
+      <div class="kpi-value">332</div>
+      <div class="kpi-sub">Vol. Entrada (2 Transp.)</div>
     </div>
     <div class="kpi-card glass-card orange">
-      <div class="kpi-title">Devoluções Totais</div>
-      <div class="kpi-value" id="kpiDevolucoes">657</div>
-      <div class="kpi-sub">Cliente (404) | Planta (253)</div>
+      <div class="kpi-title">Devolução Cliente</div>
+      <div class="kpi-value">404</div>
+      <div class="kpi-sub">Volume de Processo</div>
+    </div>
+    <div class="kpi-card glass-card red">
+      <div class="kpi-title">Devolução Planta</div>
+      <div class="kpi-value">253</div>
+      <div class="kpi-sub">Volume de Processo</div>
     </div>
   </div>
 
@@ -307,7 +320,7 @@
             <th class="text-right">SUM de Qtd. Sistema</th>
           </tr>
         </thead>
-        <tbody id="tableSaidasPlanta">
+        <tbody>
           <tr><td>Joinville</td><td class="text-right">9.337</td></tr>
           <tr><td>Manaus</td><td class="text-right">830</td></tr>
           <tr><td>Rio Claro</td><td class="text-right">5.406</td></tr>
@@ -341,7 +354,7 @@
             <th class="text-right">SUM de Qtd. Sistema</th>
           </tr>
         </thead>
-        <tbody id="tableEntradasPlanta">
+        <tbody>
           <tr><td>Joinville</td><td class="text-right">11.739</td></tr>
           <tr><td>Manaus</td><td class="text-right">2.029</td></tr>
           <tr><td>Rio Claro</td><td class="text-right">5.421</td></tr>
@@ -455,7 +468,7 @@
   });
 
   function changeMonth(val) {
-    // Função preparada para atualização dinâmica de futuros meses
+    // Lógica para futuros meses
   }
 </script>
 
