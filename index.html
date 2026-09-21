@@ -3,151 +3,220 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard Operacional - Alhandra PB</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <title>Dashboard Operacional 2026 - Alhandra PB</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-color: #f1f5f9;
-      --card-bg: #ffffff;
-      --primary: #0f172a;
-      --accent-blue: #2563eb;
+      --bg-dark: #090d16;
+      --card-bg: rgba(22, 30, 46, 0.65);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-purple: #8b5cf6;
+      --accent-cyan: #06b6d4;
+      --accent-blue: #3b82f6;
       --accent-green: #10b981;
       --accent-orange: #f59e0b;
-      --text: #334155;
-      --border: #e2e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
     }
 
     body {
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text);
-      margin: 0;
-      padding: 20px;
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.12) 0px, transparent 50%);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding: 24px;
     }
 
-    .dashboard {
-      max-width: 1100px;
+    .dashboard-container {
+      max-width: 1400px;
       margin: 0 auto;
     }
 
-    /* Cabeçalho e Barra do Filtro */
-    .header-bar {
-      background: linear-gradient(135deg, #1e293b, #0f172a);
-      color: #fff;
-      padding: 20px 24px;
-      border-radius: 12px;
-      margin-bottom: 20px;
+    /* GLASSMORPHISM CARD BASE */
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .glass-card:hover {
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+
+    /* HEADER */
+    .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 24px;
       flex-wrap: wrap;
       gap: 16px;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
 
-    .header-info h1 {
-      margin: 0;
-      font-size: 1.4rem;
-      font-weight: 600;
+    .header-title h1 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
-    .header-info p {
-      margin: 4px 0 0 0;
-      opacity: 0.8;
-      font-size: 0.85rem;
+    .header-title p {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      margin-top: 4px;
     }
 
-    /* Select de Mês */
-    .filter-container {
+    .filter-badge {
       display: flex;
       align-items: center;
-      gap: 10px;
-      background: rgba(255, 255, 255, 0.1);
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.05);
       padding: 8px 16px;
-      border-radius: 8px;
+      border-radius: 30px;
+      border: 1px solid var(--card-border);
     }
 
-    .filter-container label {
-      font-size: 0.85rem;
-      font-weight: 600;
-    }
-
-    select {
-      background: #ffffff;
-      color: var(--primary);
+    .filter-badge select {
+      background: transparent;
       border: none;
-      padding: 8px 12px;
-      border-radius: 6px;
+      color: var(--text-main);
       font-weight: 600;
-      cursor: pointer;
+      font-size: 0.9rem;
       outline: none;
+      cursor: pointer;
     }
 
-    /* Cards KPI */
+    /* TOP KPIS GRID */
     .kpi-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 16px;
       margin-bottom: 24px;
     }
 
     .kpi-card {
-      background: var(--card-bg);
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      border-top: 4px solid var(--accent-blue);
+      position: relative;
+      overflow: hidden;
     }
 
-    .kpi-card.green { border-top-color: var(--accent-green); }
-    .kpi-card.orange { border-top-color: var(--accent-orange); }
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-purple), var(--accent-cyan));
+    }
 
-    .kpi-title {
+    .kpi-card.green::before {
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-green));
+    }
+
+    .kpi-card.orange::before {
+      background: linear-gradient(90deg, var(--accent-orange), #ef4444);
+    }
+
+    .kpi-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-muted);
       font-size: 0.8rem;
-      color: #64748b;
+      font-weight: 600;
       text-transform: uppercase;
-      font-weight: 700;
+      letter-spacing: 0.5px;
     }
 
     .kpi-value {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: var(--primary);
-      margin-top: 8px;
+      font-size: 2rem;
+      font-weight: 800;
+      margin: 12px 0 6px 0;
+      color: #fff;
     }
 
-    /* Gráficos */
-    .charts-grid {
+    .kpi-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .trend-up { color: var(--accent-green); }
+    .trend-down { color: #ef4444; }
+
+    /* LAYOUT DE SEÇÕES DA OPERAÇÃO */
+    .sections-grid {
       display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 20px;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
       margin-bottom: 24px;
     }
 
-    @media (max-width: 768px) {
-      .charts-grid { grid-template-columns: 1fr; }
+    @media (max-width: 1024px) {
+      .sections-grid { grid-template-columns: 1fr; }
     }
 
-    .chart-card {
-      background: var(--card-bg);
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-
-    .chart-card h3 {
-      margin-top: 0;
-      font-size: 0.95rem;
-      color: var(--primary);
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 700;
       margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    /* Tabela */
-    .table-card {
-      background: var(--card-bg);
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-cyan);
+    }
+
+    /* BARRA DE PROGRESSO CUSTOMIZADA */
+    .progress-item {
+      margin-bottom: 14px;
+    }
+
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      margin-bottom: 6px;
+    }
+
+    .progress-bg {
+      height: 8px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, var(--accent-purple), var(--accent-cyan));
+    }
+
+    /* TABELA ESTILIZADA */
+    .table-container {
       overflow-x: auto;
     }
 
@@ -158,221 +227,191 @@
     }
 
     th {
-      background-color: #f8fafc;
-      color: var(--primary);
-      font-weight: 700;
       padding: 12px 16px;
-      border-bottom: 2px solid var(--border);
-      font-size: 0.85rem;
+      font-size: 0.75rem;
       text-transform: uppercase;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--card-border);
     }
 
     td {
       padding: 12px 16px;
-      border-bottom: 1px solid var(--border);
-      font-size: 0.9rem;
+      font-size: 0.875rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
     }
 
-    tr.category-header td {
-      background-color: #f1f5f9;
-      font-weight: 700;
-      color: var(--accent-blue);
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
     }
 
-    .text-center { text-align: center; }
-    .text-right { text-align: right; }
+    .plant-badge {
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: rgba(59, 130, 246, 0.15);
+      color: #93c5fd;
+    }
+
+    /* MÉDIAS DIÁRIAS BOX */
+    .medias-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .media-card {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--card-border);
+      padding: 12px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .media-card span {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .media-card strong {
+      font-size: 1.1rem;
+      color: #fff;
+      margin-top: 4px;
+      display: block;
+    }
   </style>
 </head>
 <body>
 
-<div class="dashboard">
+<div class="dashboard-container">
 
-  <!-- BARRA SUPERIOR COM FILTRO -->
-  <div class="header-bar">
-    <div class="header-info">
-      <h1>Movimentações da Operação</h1>
-      <p>Operação Alhandra - PB</p>
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-title">
+      <h1>Dashboard Operacional AI</h1>
+      <p>Operação Alhandra PB • Fechamento Unificado 2026</p>
     </div>
-    <div class="filter-container">
-      <label for="monthSelect">Selecione o Mês:</label>
-      <select id="monthSelect" onchange="updateDashboard(this.value)">
-        <option value="08/2026" selected>08/2026 (Agosto)</option>
-        <option value="07/2026">07/2026 (Julho)</option>
-        <option value="06/2026">06/2026 (Junho)</option>
+    <div class="filter-badge">
+      <span>Mês de Referência:</span>
+      <select id="monthFilter">
+        <option value="08/2026" selected>08/2026 (Consolidado)</option>
       </select>
     </div>
   </div>
 
-  <!-- CARDS KPI -->
+  <!-- KPIS PRINCIPAIS -->
   <div class="kpi-grid">
-    <div class="kpi-card">
-      <div class="kpi-title">Total de Peças</div>
-      <div class="kpi-value" id="kpiPecas">0</div>
+    <div class="kpi-card glass-card">
+      <div class="kpi-header">Total Entradas (Volume)</div>
+      <div class="kpi-value">19.521</div>
+      <div class="kpi-sub"><span class="trend-up">↑ 100%</span> P.A (19.189) + Malhas (332)</div>
     </div>
-    <div class="kpi-card green">
-      <div class="kpi-title">Total de Transportes</div>
-      <div class="kpi-value" id="kpiTransportes">0</div>
+    <div class="kpi-card glass-card green">
+      <div class="kpi-header">Total Saídas (Volume)</div>
+      <div class="kpi-value">15.745</div>
+      <div class="kpi-sub"><span class="trend-up">↑ 100%</span> P.A (15.573) + Malhas (172)</div>
     </div>
-    <div class="kpi-card orange">
-      <div class="kpi-title">Devoluções (Peças)</div>
-      <div class="kpi-value" id="kpiDevolucoes">0</div>
+    <div class="kpi-card glass-card">
+      <div class="kpi-header">Qtd. Transportes</div>
+      <div class="kpi-value">240</div>
+      <div class="kpi-sub">Saídas (234) + Malhas (6)</div>
     </div>
-  </div>
-
-  <!-- GRÁFICOS -->
-  <div class="charts-grid">
-    <div class="chart-card">
-      <h3>Volume de Peças por Categoria</h3>
-      <canvas id="barChart"></canvas>
-    </div>
-    <div class="chart-card">
-      <h3>Proporção de Transportes</h3>
-      <canvas id="doughnutChart"></canvas>
+    <div class="kpi-card glass-card orange">
+      <div class="kpi-header">Total Devoluções</div>
+      <div class="kpi-value">657</div>
+      <div class="kpi-sub"><span class="trend-down">↓</span> Cliente (404) + Planta (253)</div>
     </div>
   </div>
 
-  <!-- TABELA -->
-  <div class="table-card">
-    <h3>Detalhamento das Operações</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Categoria</th>
-          <th class="text-center">Total de Transportes</th>
-          <th class="text-right">Total de Peças</th>
-        </tr>
-      </thead>
-      <tbody id="tableBody"></tbody>
-    </table>
+  <!-- GRADE DE COMPARATIVO ENTRADAS VS SAÍDAS -->
+  <div class="sections-grid">
+    
+    <!-- ENTRADAS -->
+    <div class="glass-card">
+      <div class="section-title"><div class="dot" style="background: var(--accent-cyan)"></div> Detalhes de Entradas (Recebimentos)</div>
+      
+      <div class="progress-item">
+        <div class="progress-info"><span>Joinville</span><strong>11.739 un</strong></div>
+        <div class="progress-bg"><div class="progress-fill" style="width: 61%;"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-info"><span>Rio Claro</span><strong>5.421 un</strong></div>
+        <div class="progress-bg"><div class="progress-fill" style="width: 28%;"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-info"><span>Manaus</span><strong>2.029 un</strong></div>
+        <div class="progress-bg"><div class="progress-fill" style="width: 11%;"></div></div>
+      </div>
+
+      <div class="medias-grid">
+        <div class="media-card"><span>Média Geral</span><strong>959/dia</strong></div>
+        <div class="media-card"><span>Média Joinville</span><strong>587/dia</strong></div>
+        <div class="media-card"><span>Média Rio Claro</span><strong>271/dia</strong></div>
+        <div class="media-card"><span>Média Manaus</span><strong>101/dia</strong></div>
+      </div>
+    </div>
+
+    <!-- SAÍDAS -->
+    <div class="glass-card">
+      <div class="section-title"><div class="dot" style="background: var(--accent-purple)"></div> Detalhes de Saídas (Expedições)</div>
+      
+      <div class="progress-item">
+        <div class="progress-info"><span>Joinville</span><strong>9.337 un</strong></div>
+        <div class="progress-bg"><div class="progress-fill" style="width: 60%; background: linear-gradient(90deg, #8b5cf6, #ec4899);"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-info"><span>Rio Claro</span><strong>5.406 un</strong></div>
+        <div class="progress-bg"><div class="progress-fill" style="width: 35%; background: linear-gradient(90deg, #8b5cf6, #ec4899);"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-info"><span>Manaus</span><strong>830 un</strong></div>
+        <div class="progress-bg"><div class="progress-fill" style="width: 5%; background: linear-gradient(90deg, #8b5cf6, #ec4899);"></div></div>
+      </div>
+
+      <div class="medias-grid">
+        <div class="media-card"><span>Média Geral</span><strong>779/dia</strong></div>
+        <div class="media-card"><span>Média Joinville</span><strong>467/dia</strong></div>
+        <div class="media-card"><span>Média Rio Claro</span><strong>270/dia</strong></div>
+        <div class="media-card"><span>Média Manaus</span><strong>42/dia</strong></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TABELA DE FAMÍLIAS -->
+  <div class="glass-card">
+    <div class="section-title"><div class="dot" style="background: var(--accent-green)"></div> Consolidação por Família de Produtos</div>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Família</th>
+            <th>Entradas (Volume)</th>
+            <th>Saídas (Volume)</th>
+            <th>Diferença</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Refrigerador</td><td>10.301</td><td>7.998</td><td><span class="plant-badge">+2.303</span></td></tr>
+          <tr><td>Lavadora</td><td>3.020</td><td>3.118</td><td><span class="plant-badge" style="background:rgba(239, 68, 68, 0.15); color:#fca5a5">-98</span></td></tr>
+          <tr><td>Fogão</td><td>1.769</td><td>1.753</td><td><span class="plant-badge">+16</span></td></tr>
+          <tr><td>M.Ondas</td><td>1.705</td><td>441</td><td><span class="plant-badge">+1.264</span></td></tr>
+          <tr><td>Freezer</td><td>1.276</td><td>1.068</td><td><span class="plant-badge">+208</span></td></tr>
+          <tr><td>Forno</td><td>432</td><td>293</td><td><span class="plant-badge">+139</span></td></tr>
+          <tr><td>L.Louça</td><td>267</td><td>328</td><td><span class="plant-badge" style="background:rgba(239, 68, 68, 0.15); color:#fca5a5">-61</span></td></tr>
+          <tr><td>Cooktop</td><td>170</td><td>226</td><td><span class="plant-badge" style="background:rgba(239, 68, 68, 0.15); color:#fca5a5">-56</span></td></tr>
+          <tr><td>Frigobar</td><td>136</td><td>178</td><td><span class="plant-badge" style="background:rgba(239, 68, 68, 0.15); color:#fca5a5">-42</span></td></tr>
+          <tr><td>Arcondicionado</td><td>57</td><td>61</td><td><span class="plant-badge" style="background:rgba(239, 68, 68, 0.15); color:#fca5a5">-4</span></td></tr>
+          <tr><td>Secadora</td><td>30</td><td>16</td><td><span class="plant-badge">+14</span></td></tr>
+          <tr><td>Cervejeira</td><td>26</td><td>93</td><td><span class="plant-badge" style="background:rgba(239, 68, 68, 0.15); color:#fca5a5">-67</span></td></tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
 </div>
-
-<script>
-  // BANCO DE DADOS DOS MESES (Adicione novos meses aqui!)
-  const database = {
-    "08/2026": {
-      kpi: { pecas: "35.923", transportes: "427", devolucoes: "657" },
-      pecasArray: [15573, 172, 19189, 332, 404, 253],
-      transportesArray: [238, 183, 4, 3], // Expedição, Recebimento, Dev. Cliente, Dev. Planta
-      table: [
-        { cat: "Expedições", isHeader: true },
-        { name: "P.A", t: "234", p: "15.573" },
-        { name: "Malhas Peças", t: "4", p: "172" },
-        { cat: "Recebimentos", isHeader: true },
-        { name: "P.A", t: "181", p: "19.189" },
-        { name: "Peças", t: "2", p: "332" },
-        { cat: "Devolução Cliente", isHeader: true },
-        { name: "P.A", t: "4", p: "404" },
-        { cat: "Devolução Planta", isHeader: true },
-        { name: "P.A", t: "3", p: "253" }
-      ]
-    },
-    "07/2026": {
-      kpi: { pecas: "28.450", transportes: "390", devolucoes: "410" },
-      pecasArray: [12000, 150, 15000, 200, 250, 160],
-      transportesArray: [210, 160, 3, 2],
-      table: [
-        { cat: "Expedições", isHeader: true },
-        { name: "P.A", t: "206", p: "12.000" },
-        { name: "Malhas Peças", t: "4", p: "150" },
-        { cat: "Recebimentos", isHeader: true },
-        { name: "P.A", t: "158", p: "15.000" },
-        { name: "Peças", t: "2", p: "200" },
-        { cat: "Devolução Cliente", isHeader: true },
-        { name: "P.A", t: "3", p: "250" },
-        { cat: "Devolução Planta", isHeader: true },
-        { name: "P.A", t: "2", p: "160" }
-      ]
-    },
-    "06/2026": {
-      kpi: { pecas: "31.100", transportes: "405", devolucoes: "520" },
-      pecasArray: [14000, 160, 16000, 250, 300, 220],
-      transportesArray: [220, 170, 5, 4],
-      table: [
-        { cat: "Expedições", isHeader: true },
-        { name: "P.A", t: "215", p: "14.000" },
-        { name: "Malhas Peças", t: "5", p: "160" },
-        { cat: "Recebimentos", isHeader: true },
-        { name: "P.A", t: "167", p: "16.000" },
-        { name: "Peças", t: "3", p: "250" },
-        { cat: "Devolução Cliente", isHeader: true },
-        { name: "P.A", t: "5", p: "300" },
-        { cat: "Devolução Planta", isHeader: true },
-        { name: "P.A", t: "4", p: "220" }
-      ]
-    }
-  };
-
-  let barChart, doughnutChart;
-
-  function initCharts() {
-    const ctxBar = document.getElementById('barChart').getContext('2d');
-    barChart = new Chart(ctxBar, {
-      type: 'bar',
-      data: {
-        labels: ['Expedição P.A', 'Expedição Malhas', 'Recebimento P.A', 'Recebimento Peças', 'Dev. Cliente P.A', 'Dev. Planta P.A'],
-        datasets: [{
-          label: 'Total de Peças',
-          data: [],
-          backgroundColor: ['#2563eb', '#60a5fa', '#10b981', '#34d399', '#f59e0b', '#ef4444'],
-          borderRadius: 6
-        }]
-      },
-      options: { responsive: true, plugins: { legend: { display: false } } }
-    });
-
-    const ctxDoughnut = document.getElementById('doughnutChart').getContext('2d');
-    doughnutChart = new Chart(ctxDoughnut, {
-      type: 'doughnut',
-      data: {
-        labels: ['Expedições', 'Recebimentos', 'Dev. Cliente', 'Dev. Planta'],
-        datasets: [{
-          data: [],
-          backgroundColor: ['#2563eb', '#10b981', '#f59e0b', '#ef4444']
-        }]
-      },
-      options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
-    });
-  }
-
-  function updateDashboard(month) {
-    const data = database[month];
-    if (!data) return;
-
-    // Atualizar KPIs
-    document.getElementById('kpiPecas').innerText = data.kpi.pecas;
-    document.getElementById('kpiTransportes').innerText = data.kpi.transportes;
-    document.getElementById('kpiDevolucoes').innerText = data.kpi.devolucoes;
-
-    // Atualizar Gráficos
-    barChart.data.datasets[0].data = data.pecasArray;
-    barChart.update();
-
-    doughnutChart.data.datasets[0].data = data.transportesArray;
-    doughnutChart.update();
-
-    // Atualizar Tabela
-    const tbody = document.getElementById('tableBody');
-    tbody.innerHTML = '';
-    data.table.forEach(row => {
-      if (row.isHeader) {
-        tbody.innerHTML += `<tr class="category-header"><td colspan="3">${row.cat}</td></tr>`;
-      } else {
-        tbody.innerHTML += `
-          <tr>
-            <td style="padding-left: 32px;">${row.name}</td>
-            <td class="text-center">${row.t}</td>
-            <td class="text-right">${row.p}</td>
-          </tr>`;
-      }
-    });
-  }
-
-  // Inicializa tela no mês selecionado
-  initCharts();
-  updateDashboard('08/2026');
-</script>
 
 </body>
 </html>
