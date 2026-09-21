@@ -223,6 +223,25 @@
       color: var(--accent-purple);
     }
 
+    /* BADGES DE SALDO */
+    .badge-saldo-pos {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .badge-saldo-neg {
+      background: rgba(239, 68, 68, 0.15);
+      color: #fca5a5;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
     /* MEDIA DIARIA BOX */
     .media-box {
       background: rgba(0, 0, 0, 0.25);
@@ -386,7 +405,7 @@
 
   </div>
 
-  <!-- TABELA COMPLETA POR FAMÍLIA -->
+  <!-- TABELA COMPLETA POR FAMÍLIA COM COLUNA DE SALDO -->
   <div class="glass-card">
     <div class="section-title"><div class="dot" style="background: var(--accent-blue)"></div> Comparativo por Família de Produtos</div>
     <table>
@@ -395,21 +414,25 @@
           <th>Família</th>
           <th class="text-right">Saídas (Qtd.)</th>
           <th class="text-right">Entradas (Qtd.)</th>
+          <th class="text-right">Saldo (Entradas - Saídas)</th>
         </tr>
       </thead>
       <tbody>
-        <tr><td>Refrigerador</td><td class="text-right">7.998</td><td class="text-right">10.301</td></tr>
-        <tr><td>Lavadora</td><td class="text-right">3.118</td><td class="text-right">3.020</td></tr>
-        <tr><td>Fogão</td><td class="text-right">1.753</td><td class="text-right">1.769</td></tr>
-        <tr><td>Freezer</td><td class="text-right">1.068</td><td class="text-right">1.276</td></tr>
-        <tr><td>M.Ondas</td><td class="text-right">441</td><td class="text-right">1.705</td></tr>
-        <tr><td>L.Louça</td><td class="text-right">328</td><td class="text-right">267</td></tr>
-        <tr><td>Forno</td><td class="text-right">293</td><td class="text-right">432</td></tr>
-        <tr><td>Cooktop</td><td class="text-right">226</td><td class="text-right">170</td></tr>
-        <tr><td>Frigobar</td><td class="text-right">178</td><td class="text-right">136</td></tr>
-        <tr><td>Cervejeira</td><td class="text-right">93</td><td class="text-right">26</td></tr>
-        <tr><td>Arcondicionado</td><td class="text-right">61</td><td class="text-right">57</td></tr>
-        <tr><td>Secadora</td><td class="text-right">16</td><td class="text-right">30</td></tr>
+        <tr><td>Refrigerador</td><td class="text-right">7.998</td><td class="text-right">10.301</td><td class="text-right"><span class="badge-saldo-pos">+2.303</span></td></tr>
+        <tr><td>Lavadora</td><td class="text-right">3.118</td><td class="text-right">3.020</td><td class="text-right"><span class="badge-saldo-neg">-98</span></td></tr>
+        <tr><td>Fogão</td><td class="text-right">1.753</td><td class="text-right">1.769</td><td class="text-right"><span class="badge-saldo-pos">+16</span></td></tr>
+        <tr><td>Freezer</td><td class="text-right">1.068</td><td class="text-right">1.276</td><td class="text-right"><span class="badge-saldo-pos">+208</span></td></tr>
+        <tr><td>M.Ondas</td><td class="text-right">441</td><td class="text-right">1.705</td><td class="text-right"><span class="badge-saldo-pos">+1.264</span></td></tr>
+        <tr><td>L.Louça</td><td class="text-right">328</td><td class="text-right">267</td><td class="text-right"><span class="badge-saldo-neg">-61</span></td></tr>
+        <tr><td>Forno</td><td class="text-right">293</td><td class="text-right">432</td><td class="text-right"><span class="badge-saldo-pos">+139</span></td></tr>
+        <tr><td>Cooktop</td><td class="text-right">226</td><td class="text-right">170</td><td class="text-right"><span class="badge-saldo-neg">-56</span></td></tr>
+        <tr><td>Frigobar</td><td class="text-right">178</td><td class="text-right">136</td><td class="text-right"><span class="badge-saldo-neg">-42</span></td></tr>
+        <tr><td>Cervejeira</td><td class="text-right">93</td><td class="text-right">26</td><td class="text-right"><span class="badge-saldo-neg">-67</span></td></tr>
+        <tr><td>Arcondicionado</td><td class="text-right">61</td><td class="text-right">57</td><td class="text-right"><span class="badge-saldo-neg">-4</span></td></tr>
+        <tr><td>Secadora</td><td class="text-right">16</td><td class="text-right">30</td><td class="text-right"><span class="badge-saldo-pos">+14</span></td></tr>
+        <tr style="font-weight: 700; background: rgba(255,255,255,0.05)">
+          <td>Total Geral</td><td class="text-right">15.573</td><td class="text-right">19.189</td><td class="text-right"><span class="badge-saldo-pos">+3.616</span></td>
+        </tr>
       </tbody>
     </table>
   </div>
