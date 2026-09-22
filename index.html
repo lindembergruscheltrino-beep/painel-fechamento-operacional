@@ -250,7 +250,7 @@
     }
 
     td {
-      padding: 10px 12px;
+      padding: 12px 12px;
       font-size: 0.82rem;
       border-bottom: 1px solid rgba(255, 255, 255, 0.03);
     }
@@ -258,34 +258,82 @@
     .text-center { text-align: center; }
     .text-right { text-align: right; }
 
-    .badge-pct {
-      background: rgba(255, 255, 255, 0.08);
-      padding: 3px 8px;
-      border-radius: 6px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--accent-cyan);
+    /* ESTILOS DAS BARRAS DE PROGRESSO */
+    .progress-bar-container {
+      width: 100%;
+      height: 7px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      margin-top: 6px;
+      overflow: hidden;
     }
 
-    .badge-pct.purple { color: var(--accent-purple); }
-
-    .badge-saldo-pos {
-      background: rgba(16, 185, 129, 0.15);
-      color: #34d399;
-      padding: 3px 8px;
-      border-radius: 6px;
-      font-size: 0.75rem;
-      font-weight: 700;
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 10px;
+      transition: width 0.4s ease;
     }
 
-    .badge-saldo-neg {
-      background: rgba(239, 68, 68, 0.15);
-      color: #fca5a5;
-      padding: 3px 8px;
-      border-radius: 6px;
-      font-size: 0.75rem;
-      font-weight: 700;
+    .progress-bar-fill.purple {
+      background: var(--accent-purple);
     }
+
+    .progress-bar-fill.cyan {
+      background: var(--accent-cyan);
+    }
+
+    /* BARRA DE SALDO BIPOLAR */
+    .saldo-cell {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    .saldo-track {
+      position: relative;
+      width: 100px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .saldo-center-line {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: 2px;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .saldo-bar {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+
+    .saldo-bar.pos {
+      left: 50%;
+      background: var(--accent-green);
+    }
+
+    .saldo-bar.neg {
+      right: 50%;
+      background: var(--accent-red);
+    }
+
+    .saldo-num {
+      font-weight: 700;
+      min-width: 60px;
+      text-align: right;
+    }
+
+    .saldo-num.pos { color: #34d399; }
+    .saldo-num.neg { color: #fca5a5; }
 
     /* MEDIA DIARIA BOX */
     .media-box {
@@ -394,8 +442,7 @@
         <thead>
           <tr>
             <th>Planta</th>
-            <th class="text-right">Qtd. Sistema</th>
-            <th class="text-right">% Representatividade</th>
+            <th class="text-right">Qtd. Sistema / % Rep.</th>
           </tr>
         </thead>
         <tbody id="tblExpPlanta"></tbody>
@@ -417,8 +464,7 @@
         <thead>
           <tr>
             <th>Planta</th>
-            <th class="text-right">Qtd. Sistema</th>
-            <th class="text-right">% Representatividade</th>
+            <th class="text-right">Qtd. Sistema / % Rep.</th>
           </tr>
         </thead>
         <tbody id="tblRecPlanta"></tbody>
@@ -451,7 +497,6 @@
 </div>
 
 <script>
-  // BANCO DE DADOS EXTRAÍDO DIRETAMENTE DA PLANILHA EXCEL
   const db = {
     "09/2026": {
       recTotal: 11797, expTotal: 10734,
@@ -460,30 +505,30 @@
       malhaEntrada: 0, malhaEntradaSub: "Vol. Entrada",
       devCliente: 200, devPlanta: 100,
       recPlantas: [
-        { name: "Joinville", qty: 7110, pct: "60,27%" },
-        { name: "Rio Claro", qty: 4687, pct: "39,73%" },
-        { name: "Manaus", qty: 0, pct: "0,00%" }
+        { name: "Joinville", qty: 7110, pctNum: 60.27, pctStr: "60.27%" },
+        { name: "Rio Claro", qty: 4687, pctNum: 39.73, pctStr: "39.73%" },
+        { name: "Manaus", qty: 0, pctNum: 0.00, pctStr: "0.00%" }
       ],
       expPlantas: [
-        { name: "Joinville", qty: 7036, pct: "65,55%" },
-        { name: "Rio Claro", qty: 3306, pct: "30,80%" },
-        { name: "Manaus", qty: 392, pct: "3,65%" }
+        { name: "Joinville", qty: 7036, pctNum: 65.55, pctStr: "65.55%" },
+        { name: "Rio Claro", qty: 3306, pctNum: 30.80, pctStr: "30.80%" },
+        { name: "Manaus", qty: 392, pctNum: 3.65, pctStr: "3.65%" }
       ],
       recMedias: { geral: 562, joinville: 356, rioClaro: 590, manaus: 234 },
       expMedias: { geral: 511, joinville: 335, rioClaro: 157, manaus: 19 },
       familias: [
-        { name: "Refrigerador", exp: 6002, rec: 6181, pctExp: "55,92%" },
-        { name: "Lavadora", exp: 1769, rec: 2811, pctExp: "16,48%" },
-        { name: "Fogão", exp: 1107, rec: 1401, pctExp: "10,31%" },
-        { name: "Freezer", exp: 939, rec: 727, pctExp: "8,75%" },
-        { name: "Forno", exp: 277, rec: 189, pctExp: "2,58%" },
-        { name: "M.Ondas", exp: 197, rec: 0, pctExp: "1,84%" },
-        { name: "Cooktop", exp: 149, rec: 282, pctExp: "1,39%" },
-        { name: "L.Louça", exp: 134, rec: 0, pctExp: "1,25%" },
-        { name: "Arcondicionado", exp: 61, rec: 0, pctExp: "0,57%" },
-        { name: "Cervejeira", exp: 53, rec: 57, pctExp: "0,49%" },
-        { name: "Frigobar", exp: 42, rec: 145, pctExp: "0,39%" },
-        { name: "Secadora", exp: 4, rec: 4, pctExp: "0,04%" }
+        { name: "Refrigerador", exp: 6002, rec: 6181, pctExp: "55.92%" },
+        { name: "Lavadora", exp: 1769, rec: 2811, pctExp: "16.48%" },
+        { name: "Fogão", exp: 1107, rec: 1401, pctExp: "10.31%" },
+        { name: "Freezer", exp: 939, rec: 727, pctExp: "8.75%" },
+        { name: "Forno", exp: 277, rec: 189, pctExp: "2.58%" },
+        { name: "M.Ondas", exp: 197, rec: 0, pctExp: "1.84%" },
+        { name: "Cooktop", exp: 149, rec: 282, pctExp: "1.39%" },
+        { name: "L.Louça", exp: 134, rec: 0, pctExp: "1.25%" },
+        { name: "Arcondicionado", exp: 61, rec: 0, pctExp: "0.57%" },
+        { name: "Cervejeira", exp: 53, rec: 57, pctExp: "0.49%" },
+        { name: "Frigobar", exp: 42, rec: 145, pctExp: "0.39%" },
+        { name: "Secadora", exp: 4, rec: 4, pctExp: "0.04%" }
       ]
     },
     "08/2026": {
@@ -493,30 +538,30 @@
       malhaEntrada: 332, malhaEntradaSub: "Vol. Entrada (2 Transp.)",
       devCliente: 404, devPlanta: 253,
       recPlantas: [
-        { name: "Joinville", qty: 11739, pct: "61,17%" },
-        { name: "Rio Claro", qty: 5421, pct: "28,25%" },
-        { name: "Manaus", qty: 2029, pct: "10,58%" }
+        { name: "Joinville", qty: 11739, pctNum: 61.17, pctStr: "61.17%" },
+        { name: "Rio Claro", qty: 5421, pctNum: 28.25, pctStr: "28.25%" },
+        { name: "Manaus", qty: 2029, pctNum: 10.58, pctStr: "10.58%" }
       ],
       expPlantas: [
-        { name: "Joinville", qty: 9337, pct: "59,96%" },
-        { name: "Rio Claro", qty: 5406, pct: "34,71%" },
-        { name: "Manaus", qty: 830, pct: "5,33%" }
+        { name: "Joinville", qty: 9337, pctNum: 59.96, pctStr: "59.96%" },
+        { name: "Rio Claro", qty: 5406, pctNum: 34.71, pctStr: "34.71%" },
+        { name: "Manaus", qty: 830, pctNum: 5.33, pctStr: "5.33%" }
       ],
       recMedias: { geral: 959, joinville: 587, rioClaro: 271, manaus: 101 },
       expMedias: { geral: 779, joinville: 467, rioClaro: 270, manaus: 42 },
       familias: [
-        { name: "Refrigerador", exp: 7998, rec: 10301, pctExp: "51,36%" },
-        { name: "Lavadora", exp: 3118, rec: 3020, pctExp: "20,02%" },
-        { name: "Fogão", exp: 1753, rec: 1769, pctExp: "11,26%" },
-        { name: "Freezer", exp: 1068, rec: 1276, pctExp: "6,86%" },
-        { name: "M.Ondas", exp: 441, rec: 1705, pctExp: "2,83%" },
-        { name: "L.Louça", exp: 328, rec: 267, pctExp: "2,11%" },
-        { name: "Forno", exp: 293, rec: 432, pctExp: "1,88%" },
-        { name: "Cooktop", exp: 226, rec: 170, pctExp: "1,45%" },
-        { name: "Frigobar", exp: 178, rec: 136, pctExp: "1,14%" },
-        { name: "Cervejeira", exp: 93, rec: 26, pctExp: "0,60%" },
-        { name: "Arcondicionado", exp: 61, rec: 57, pctExp: "0,39%" },
-        { name: "Secadora", exp: 16, rec: 30, pctExp: "0,10%" }
+        { name: "Refrigerador", exp: 7998, rec: 10301, pctExp: "51.36%" },
+        { name: "Lavadora", exp: 3118, rec: 3020, pctExp: "20.02%" },
+        { name: "Fogão", exp: 1753, rec: 1769, pctExp: "11.26%" },
+        { name: "Freezer", exp: 1068, rec: 1276, pctExp: "6.86%" },
+        { name: "M.Ondas", exp: 441, rec: 1705, pctExp: "2.83%" },
+        { name: "L.Louça", exp: 328, rec: 267, pctExp: "2.11%" },
+        { name: "Forno", exp: 293, rec: 432, pctExp: "1.88%" },
+        { name: "Cooktop", exp: 226, rec: 170, pctExp: "1.45%" },
+        { name: "Frigobar", exp: 178, rec: 136, pctExp: "1.14%" },
+        { name: "Cervejeira", exp: 93, rec: 26, pctExp: "0.60%" },
+        { name: "Arcondicionado", exp: 61, rec: 57, pctExp: "0.39%" },
+        { name: "Secadora", exp: 16, rec: 30, pctExp: "0.10%" }
       ]
     }
   };
@@ -540,30 +585,48 @@
     document.getElementById('kpiDevPlanta').innerText = fmt(data.devPlanta);
 
     // TICKER
-    let tickerHTML = '';
     const buildItems = () => data.familias.map(f => `
       <div class="ticker-item">
         <span class="ticker-label">${f.name}</span>
         <span class="ticker-value">${fmt(f.exp)} un</span>
         <span class="ticker-pct">${f.pctExp}</span>
       </div>`).join('');
-    tickerHTML = buildItems() + buildItems(); // Duplica para loop contínuo
-    document.getElementById('tickerTrack').innerHTML = tickerHTML;
+    document.getElementById('tickerTrack').innerHTML = buildItems() + buildItems();
 
-    // TABELA EXPEDIÇÕES PLANTA
+    // TABELA EXPEDIÇÕES PLANTA COM BARRA
     let expHtml = '';
     data.expPlantas.forEach(p => {
-      expHtml += `<tr><td>${p.name}</td><td class="text-right">${fmt(p.qty)}</td><td class="text-right"><span class="badge-pct purple">${p.pct}</span></td></tr>`;
+      expHtml += `
+        <tr>
+          <td style="vertical-align: top;">
+            <strong>${p.name}</strong>
+            <div class="progress-bar-container">
+              <div class="progress-bar-fill purple" style="width: ${p.pctNum}%;"></div>
+            </div>
+          </td>
+          <td class="text-right" style="vertical-align: top;">
+            <strong>${fmt(p.qty)}</strong> <span style="color: var(--text-muted); font-size: 0.75rem;">• ${p.pctStr}</span>
+          </td>
+        </tr>`;
     });
-    expHtml += `<tr style="font-weight: 700; background: rgba(255,255,255,0.05)"><td>Total Geral</td><td class="text-right">${fmt(data.expTotal)}</td><td class="text-right"><span class="badge-pct purple">100,00%</span></td></tr>`;
     document.getElementById('tblExpPlanta').innerHTML = expHtml;
 
-    // TABELA RECEBIMENTOS PLANTA
+    // TABELA RECEBIMENTOS PLANTA COM BARRA
     let recHtml = '';
     data.recPlantas.forEach(p => {
-      recHtml += `<tr><td>${p.name}</td><td class="text-right">${fmt(p.qty)}</td><td class="text-right"><span class="badge-pct">${p.pct}</span></td></tr>`;
+      recHtml += `
+        <tr>
+          <td style="vertical-align: top;">
+            <strong>${p.name}</strong>
+            <div class="progress-bar-container">
+              <div class="progress-bar-fill cyan" style="width: ${p.pctNum}%;"></div>
+            </div>
+          </td>
+          <td class="text-right" style="vertical-align: top;">
+            <strong>${fmt(p.qty)}</strong> <span style="color: var(--text-muted); font-size: 0.75rem;">• ${p.pctStr}</span>
+          </td>
+        </tr>`;
     });
-    recHtml += `<tr style="font-weight: 700; background: rgba(255,255,255,0.05)"><td>Total Geral</td><td class="text-right">${fmt(data.recTotal)}</td><td class="text-right"><span class="badge-pct">100,00%</span></td></tr>`;
     document.getElementById('tblRecPlanta').innerHTML = recHtml;
 
     // MÉDIAS DIÁRIAS
@@ -579,32 +642,55 @@
       <div class="media-item"><span>Rio Claro</span><strong>${fmt(data.recMedias.rioClaro)}</strong></div>
       <div class="media-item"><span>Manaus</span><strong>${fmt(data.recMedias.manaus)}</strong></div>`;
 
-    // TABELA FAMÍLIA COM SALDO
+    // TABELA FAMÍLIA COM BARRA DE SALDO
     let famHtml = '';
     let totExp = 0, totRec = 0;
+    
+    // Maior valor absoluto para escala da barra
+    const maxSaldo = Math.max(...data.familias.map(f => Math.abs(f.rec - f.exp)), 1);
+
     data.familias.forEach(f => {
       totExp += f.exp; totRec += f.rec;
       const saldo = f.rec - f.exp;
-      const badgeClass = saldo >= 0 ? 'badge-saldo-pos' : 'badge-saldo-neg';
-      const sign = saldo >= 0 ? '+' : '';
+      const isPos = saldo >= 0;
+      const cls = isPos ? 'pos' : 'neg';
+      const sign = isPos ? '+' : '';
+      const barPct = Math.min((Math.abs(saldo) / maxSaldo) * 50, 50); // máx 50% para cada lado
+
       famHtml += `
         <tr>
           <td>${f.name}</td>
           <td class="text-right">${fmt(f.exp)}</td>
           <td class="text-right">${fmt(f.rec)}</td>
-          <td class="text-right"><span class="${badgeClass}">${sign}${fmt(saldo)}</span></td>
+          <td class="text-right">
+            <div class="saldo-cell">
+              <span class="saldo-num ${cls}">${sign}${fmt(saldo)}</span>
+              <div class="saldo-track">
+                <div class="saldo-center-line"></div>
+                <div class="saldo-bar ${cls}" style="width: ${barPct}%;"></div>
+              </div>
+            </div>
+          </td>
         </tr>`;
     });
+
     const totSaldo = totRec - totExp;
-    const totBadgeClass = totSaldo >= 0 ? 'badge-saldo-pos' : 'badge-saldo-neg';
+    const totCls = totSaldo >= 0 ? 'pos' : 'neg';
     const totSign = totSaldo >= 0 ? '+' : '';
+
     famHtml += `
       <tr style="font-weight: 700; background: rgba(255,255,255,0.05)">
         <td>Total Geral</td>
         <td class="text-right">${fmt(totExp)}</td>
         <td class="text-right">${fmt(totRec)}</td>
-        <td class="text-right"><span class="${totBadgeClass}">${totSign}${fmt(totSaldo)}</span></td>
+        <td class="text-right">
+          <div class="saldo-cell">
+            <span class="saldo-num ${totCls}">${totSign}${fmt(totSaldo)}</span>
+            <div style="width: 100px;"></div>
+          </div>
+        </td>
       </tr>`;
+
     document.getElementById('tblFamilia').innerHTML = famHtml;
   }
 
