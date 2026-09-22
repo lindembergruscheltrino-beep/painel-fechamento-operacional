@@ -18,6 +18,7 @@
       --accent-green: #10b981;
       --accent-orange: #f59e0b;
       --accent-red: #ef4444;
+      --accent-teal: #14b8a6;
     }
 
     * {
@@ -160,16 +161,13 @@
       100% { transform: translateX(-50%); }
     }
 
-    /* KPIS GRID */
+    /* KPIS GRID (4 COLUNAS RESPONSIVAS) */
     .kpi-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 16px;
       margin-bottom: 24px;
     }
-
-    @media (max-width: 900px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 600px) { .kpi-grid { grid-template-columns: 1fr; } }
 
     .kpi-card {
       position: relative;
@@ -187,6 +185,7 @@
     .kpi-card.orange::before { background: linear-gradient(90deg, var(--accent-orange), #ef4444); }
     .kpi-card.red::before { background: linear-gradient(90deg, #ef4444, #f43f5e); }
     .kpi-card.blue::before { background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan)); }
+    .kpi-card.teal::before { background: linear-gradient(90deg, var(--accent-teal), var(--accent-cyan)); }
 
     .kpi-title {
       color: var(--text-muted);
@@ -274,13 +273,8 @@
       transition: width 0.4s ease;
     }
 
-    .progress-bar-fill.purple {
-      background: var(--accent-purple);
-    }
-
-    .progress-bar-fill.cyan {
-      background: var(--accent-cyan);
-    }
+    .progress-bar-fill.purple { background: var(--accent-purple); }
+    .progress-bar-fill.cyan { background: var(--accent-cyan); }
 
     /* BARRA DE SALDO BIPOLAR */
     .saldo-cell {
@@ -301,35 +295,20 @@
 
     .saldo-center-line {
       position: absolute;
-      left: 50%;
-      top: 0;
-      width: 2px;
-      height: 100%;
+      left: 50%; top: 0; width: 2px; height: 100%;
       background: rgba(255, 255, 255, 0.2);
     }
 
     .saldo-bar {
-      position: absolute;
-      top: 0;
-      height: 100%;
-      border-radius: 4px;
-      transition: all 0.3s ease;
+      position: absolute; top: 0; height: 100%;
+      border-radius: 4px; transition: all 0.3s ease;
     }
 
-    .saldo-bar.pos {
-      left: 50%;
-      background: var(--accent-green);
-    }
-
-    .saldo-bar.neg {
-      right: 50%;
-      background: var(--accent-red);
-    }
+    .saldo-bar.pos { left: 50%; background: var(--accent-green); }
+    .saldo-bar.neg { right: 50%; background: var(--accent-red); }
 
     .saldo-num {
-      font-weight: 700;
-      min-width: 60px;
-      text-align: right;
+      font-weight: 700; min-width: 60px; text-align: right;
     }
 
     .saldo-num.pos { color: #34d399; }
@@ -395,7 +374,7 @@
     <div class="ticker-track" id="tickerTrack"></div>
   </div>
 
-  <!-- CARDS KPIS -->
+  <!-- CARDS KPIS (7 CARDS) -->
   <div class="kpi-grid">
     <div class="kpi-card glass-card green">
       <div class="kpi-title">Total Recebimentos</div>
@@ -406,6 +385,11 @@
       <div class="kpi-title">Total Expedições</div>
       <div class="kpi-value" id="kpiExp">0</div>
       <div class="kpi-sub" id="kpiExpSub">Total Saídas</div>
+    </div>
+    <div class="kpi-card glass-card teal">
+      <div class="kpi-title">Desembarque</div>
+      <div class="kpi-value" id="kpiDesemb">0</div>
+      <div class="kpi-sub" id="kpiDesembSub">Qtd. Vol. / Média Dia</div>
     </div>
     <div class="kpi-card glass-card blue">
       <div class="kpi-title">Malhas Peças (Saída)</div>
@@ -500,6 +484,7 @@
   const db = {
     "09/2026": {
       recTotal: 11797, expTotal: 10734,
+      desembTotal: 264, desembSub: "Média: 12,6/dia (21 dias úteis)",
       recSub: "Total de Entradas (P.A)", expSub: "Total Saídas (Transp.)",
       malhaSaida: 73, malhaSaidaSub: "Vol. Saída",
       malhaEntrada: 0, malhaEntradaSub: "Vol. Entrada",
@@ -533,6 +518,7 @@
     },
     "08/2026": {
       recTotal: 19189, expTotal: 15573,
+      desembTotal: 322, desembSub: "Média: 16,1/dia (20 dias úteis)",
       recSub: "Total de Entradas (P.A)", expSub: "Total Saídas (234 Transp.)",
       malhaSaida: 172, malhaSaidaSub: "Vol. Saída (4 Transp.)",
       malhaEntrada: 332, malhaEntradaSub: "Vol. Entrada (2 Transp.)",
@@ -577,6 +563,8 @@
     document.getElementById('kpiRecSub').innerText = data.recSub;
     document.getElementById('kpiExp').innerText = fmt(data.expTotal);
     document.getElementById('kpiExpSub').innerText = data.expSub;
+    document.getElementById('kpiDesemb').innerText = fmt(data.desembTotal);
+    document.getElementById('kpiDesembSub').innerText = data.desembSub;
     document.getElementById('kpiMalhaSaida').innerText = fmt(data.malhaSaida);
     document.getElementById('kpiMalhaSaidaSub').innerText = data.malhaSaidaSub;
     document.getElementById('kpiMalhaEntrada').innerText = fmt(data.malhaEntrada);
@@ -646,7 +634,6 @@
     let famHtml = '';
     let totExp = 0, totRec = 0;
     
-    // Maior valor absoluto para escala da barra
     const maxSaldo = Math.max(...data.familias.map(f => Math.abs(f.rec - f.exp)), 1);
 
     data.familias.forEach(f => {
@@ -655,7 +642,7 @@
       const isPos = saldo >= 0;
       const cls = isPos ? 'pos' : 'neg';
       const sign = isPos ? '+' : '';
-      const barPct = Math.min((Math.abs(saldo) / maxSaldo) * 50, 50); // máx 50% para cada lado
+      const barPct = Math.min((Math.abs(saldo) / maxSaldo) * 50, 50);
 
       famHtml += `
         <tr>
