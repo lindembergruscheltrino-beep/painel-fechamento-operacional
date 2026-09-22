@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard Operacional - Alhandra PB</title>
+  <title>Fechamento Mensal Alhandra</title>
   <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Mono:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -161,7 +161,7 @@
       100% { transform: translateX(-50%); }
     }
 
-    /* KPIS GRID (4 COLUNAS PERFEITAS / 2 LINHAS HARMONIOSAS) */
+    /* KPIS GRID (4 COLUNAS PERFEITAS) */
     .kpi-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -189,7 +189,6 @@
     .kpi-card.red::before { background: linear-gradient(90deg, #ef4444, #f43f5e); }
     .kpi-card.blue::before { background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan)); }
     
-    /* CARD DESEMBARQUE - CRÍTICO / ALERTA */
     .kpi-card.critical::before {
       background: linear-gradient(90deg, #ef4444, #dc2626);
     }
@@ -366,10 +365,10 @@
 
 <div class="dashboard-container">
 
-  <!-- HEADER COM FILTRO -->
+  <!-- HEADER COM NOVO TÍTULO -->
   <div class="header">
     <div class="header-title">
-      <h1>Fechamento Mensal de Operações</h1>
+      <h1>Fechamento Mensal Alhandra</h1>
       <p>Operação Alhandra - PB</p>
     </div>
     <div class="filter-container">
@@ -386,7 +385,7 @@
     <div class="ticker-track" id="tickerTrack"></div>
   </div>
 
-  <!-- CARDS KPIS (LAYOUT 4x2 SIMÉTRICO E ALINHADO) -->
+  <!-- CARDS KPIS -->
   <div class="kpi-grid">
     <div class="kpi-card glass-card green">
       <div class="kpi-title">Total Recebimentos</div>
