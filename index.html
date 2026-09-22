@@ -109,7 +109,7 @@
       color: var(--text-main);
     }
 
-    /* ESTILO FITA DE MERCADO / TICKER BAR */
+    /* TICKER BAR */
     .ticker-wrapper {
       background: rgba(15, 23, 42, 0.8);
       border: 1px solid var(--card-border);
@@ -160,7 +160,7 @@
       100% { transform: translateX(-50%); }
     }
 
-    /* KPIS GRID DE 6 CARDS */
+    /* KPIS GRID */
     .kpi-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -168,13 +168,8 @@
       margin-bottom: 24px;
     }
 
-    @media (max-width: 900px) {
-      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-
-    @media (max-width: 600px) {
-      .kpi-grid { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 900px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .kpi-grid { grid-template-columns: 1fr; } }
 
     .kpi-card {
       position: relative;
@@ -184,10 +179,7 @@
     .kpi-card::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 3px;
+      top: 0; left: 0; width: 100%; height: 3px;
       background: linear-gradient(90deg, var(--accent-purple), var(--accent-cyan));
     }
 
@@ -223,9 +215,7 @@
       margin-bottom: 24px;
     }
 
-    @media (max-width: 1024px) {
-      .sections-grid { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 1024px) { .sections-grid { grid-template-columns: 1fr; } }
 
     .section-title {
       font-size: 0.95rem;
@@ -277,9 +267,7 @@
       color: var(--accent-cyan);
     }
 
-    .badge-pct.purple {
-      color: var(--accent-purple);
-    }
+    .badge-pct.purple { color: var(--accent-purple); }
 
     .badge-saldo-pos {
       background: rgba(16, 185, 129, 0.15);
@@ -347,75 +335,48 @@
     </div>
     <div class="filter-container">
       <label for="monthSelect">Mês de Consulta:</label>
-      <select id="monthSelect">
-        <option value="08/2026" selected>08/2026</option>
+      <select id="monthSelect" onchange="updateDashboard(this.value)">
+        <option value="09/2026" selected>09/2026 (Setembro)</option>
+        <option value="08/2026">08/2026 (Agosto)</option>
       </select>
     </div>
   </div>
 
-  <!-- FITA DE COTAÇÕES ESTILO MERCADO FINANCEIRO (TICKER BAR) -->
+  <!-- FITA TICKER -->
   <div class="ticker-wrapper">
-    <div class="ticker-track">
-      <!-- Bloco 1 -->
-      <div class="ticker-item"><span class="ticker-label">REFRIGERADOR</span> <span class="ticker-value">7.998 un</span> <span class="ticker-pct">51,36%</span></div>
-      <div class="ticker-item"><span class="ticker-label">LAVADORA</span> <span class="ticker-value">3.118 un</span> <span class="ticker-pct">20,02%</span></div>
-      <div class="ticker-item"><span class="ticker-label">FOGÃO</span> <span class="ticker-value">1.753 un</span> <span class="ticker-pct">11,26%</span></div>
-      <div class="ticker-item"><span class="ticker-label">FREEZER</span> <span class="ticker-value">1.068 un</span> <span class="ticker-pct">6,86%</span></div>
-      <div class="ticker-item"><span class="ticker-label">M.ONDAS</span> <span class="ticker-value">441 un</span> <span class="ticker-pct">2,83%</span></div>
-      <div class="ticker-item"><span class="ticker-label">L.LOUÇA</span> <span class="ticker-value">328 un</span> <span class="ticker-pct">2,11%</span></div>
-      <div class="ticker-item"><span class="ticker-label">FORNO</span> <span class="ticker-value">293 un</span> <span class="ticker-pct">1,88%</span></div>
-      <div class="ticker-item"><span class="ticker-label">COOKTOP</span> <span class="ticker-value">226 un</span> <span class="ticker-pct">1,45%</span></div>
-      <div class="ticker-item"><span class="ticker-label">FRIGOBAR</span> <span class="ticker-value">178 un</span> <span class="ticker-pct">1,14%</span></div>
-      <div class="ticker-item"><span class="ticker-label">CERVEJEIRA</span> <span class="ticker-value">93 un</span> <span class="ticker-pct">0,60%</span></div>
-      <div class="ticker-item"><span class="ticker-label">ARCONDICIONADO</span> <span class="ticker-value">61 un</span> <span class="ticker-pct">0,39%</span></div>
-      <div class="ticker-item"><span class="ticker-label">SECADORA</span> <span class="ticker-value">16 un</span> <span class="ticker-pct">0,10%</span></div>
-
-      <!-- Bloco Duplicado para Loop Infinito Perfeito -->
-      <div class="ticker-item"><span class="ticker-label">REFRIGERADOR</span> <span class="ticker-value">7.998 un</span> <span class="ticker-pct">51,36%</span></div>
-      <div class="ticker-item"><span class="ticker-label">LAVADORA</span> <span class="ticker-value">3.118 un</span> <span class="ticker-pct">20,02%</span></div>
-      <div class="ticker-item"><span class="ticker-label">FOGÃO</span> <span class="ticker-value">1.753 un</span> <span class="ticker-pct">11,26%</span></div>
-      <div class="ticker-item"><span class="ticker-label">FREEZER</span> <span class="ticker-value">1.068 un</span> <span class="ticker-pct">6,86%</span></div>
-      <div class="ticker-item"><span class="ticker-label">M.ONDAS</span> <span class="ticker-value">441 un</span> <span class="ticker-pct">2,83%</span></div>
-      <div class="ticker-item"><span class="ticker-label">L.LOUÇA</span> <span class="ticker-value">328 un</span> <span class="ticker-pct">2,11%</span></div>
-      <div class="ticker-item"><span class="ticker-label">FORNO</span> <span class="ticker-value">293 un</span> <span class="ticker-pct">1,88%</span></div>
-      <div class="ticker-item"><span class="ticker-label">COOKTOP</span> <span class="ticker-value">226 un</span> <span class="ticker-pct">1,45%</span></div>
-      <div class="ticker-item"><span class="ticker-label">FRIGOBAR</span> <span class="ticker-value">178 un</span> <span class="ticker-pct">1,14%</span></div>
-      <div class="ticker-item"><span class="ticker-label">CERVEJEIRA</span> <span class="ticker-value">93 un</span> <span class="ticker-pct">0,60%</span></div>
-      <div class="ticker-item"><span class="ticker-label">ARCONDICIONADO</span> <span class="ticker-value">61 un</span> <span class="ticker-pct">0,39%</span></div>
-      <div class="ticker-item"><span class="ticker-label">SECADORA</span> <span class="ticker-value">16 un</span> <span class="ticker-pct">0,10%</span></div>
-    </div>
+    <div class="ticker-track" id="tickerTrack"></div>
   </div>
 
-  <!-- CARDS KPIS INDIVIDUAIS -->
+  <!-- CARDS KPIS -->
   <div class="kpi-grid">
     <div class="kpi-card glass-card green">
       <div class="kpi-title">Total Recebimentos</div>
-      <div class="kpi-value">19.189</div>
-      <div class="kpi-sub">Total de Entradas (P.A)</div>
+      <div class="kpi-value" id="kpiRec">0</div>
+      <div class="kpi-sub" id="kpiRecSub">Total de Entradas (P.A)</div>
     </div>
     <div class="kpi-card glass-card">
       <div class="kpi-title">Total Expedições</div>
-      <div class="kpi-value">15.573</div>
-      <div class="kpi-sub">Total Saídas (234 Transp.)</div>
+      <div class="kpi-value" id="kpiExp">0</div>
+      <div class="kpi-sub" id="kpiExpSub">Total Saídas</div>
     </div>
     <div class="kpi-card glass-card blue">
       <div class="kpi-title">Malhas Peças (Saída)</div>
-      <div class="kpi-value">172</div>
-      <div class="kpi-sub">Vol. Saída (4 Transp.)</div>
+      <div class="kpi-value" id="kpiMalhaSaida">0</div>
+      <div class="kpi-sub" id="kpiMalhaSaidaSub">Vol. Saída</div>
     </div>
     <div class="kpi-card glass-card blue">
       <div class="kpi-title">Malhas Peças (Entrada)</div>
-      <div class="kpi-value">332</div>
-      <div class="kpi-sub">Vol. Entrada (2 Transp.)</div>
+      <div class="kpi-value" id="kpiMalhaEntrada">0</div>
+      <div class="kpi-sub" id="kpiMalhaEntradaSub">Vol. Entrada</div>
     </div>
     <div class="kpi-card glass-card orange">
       <div class="kpi-title">Devolução Cliente</div>
-      <div class="kpi-value">404</div>
+      <div class="kpi-value" id="kpiDevCliente">0</div>
       <div class="kpi-sub">Volume de Processo</div>
     </div>
     <div class="kpi-card glass-card red">
       <div class="kpi-title">Devolução Planta</div>
-      <div class="kpi-value">253</div>
+      <div class="kpi-value" id="kpiDevPlanta">0</div>
       <div class="kpi-sub">Volume de Processo</div>
     </div>
   </div>
@@ -437,24 +398,12 @@
             <th class="text-right">% Representatividade</th>
           </tr>
         </thead>
-        <tbody>
-          <tr><td>Joinville</td><td class="text-right">9.337</td><td class="text-right"><span class="badge-pct purple">59,96%</span></td></tr>
-          <tr><td>Rio Claro</td><td class="text-right">5.406</td><td class="text-right"><span class="badge-pct purple">34,71%</span></td></tr>
-          <tr><td>Manaus</td><td class="text-right">830</td><td class="text-right"><span class="badge-pct purple">5,33%</span></td></tr>
-          <tr style="font-weight: 700; background: rgba(255,255,255,0.05)">
-            <td>Total Geral</td><td class="text-right">15.573</td><td class="text-right"><span class="badge-pct purple">100,00%</span></td>
-          </tr>
-        </tbody>
+        <tbody id="tblExpPlanta"></tbody>
       </table>
 
       <div class="media-box">
         <h4>Média Diária (Saídas)</h4>
-        <div class="media-grid">
-          <div class="media-item"><span>Geral</span><strong>779</strong></div>
-          <div class="media-item"><span>Joinville</span><strong>467</strong></div>
-          <div class="media-item"><span>Rio Claro</span><strong>270</strong></div>
-          <div class="media-item"><span>Manaus</span><strong>42</strong></div>
-        </div>
+        <div class="media-grid" id="mediaExpGrid"></div>
       </div>
     </div>
 
@@ -472,30 +421,18 @@
             <th class="text-right">% Representatividade</th>
           </tr>
         </thead>
-        <tbody>
-          <tr><td>Joinville</td><td class="text-right">11.739</td><td class="text-right"><span class="badge-pct">61,17%</span></td></tr>
-          <tr><td>Rio Claro</td><td class="text-right">5.421</td><td class="text-right"><span class="badge-pct">28,25%</span></td></tr>
-          <tr><td>Manaus</td><td class="text-right">2.029</td><td class="text-right"><span class="badge-pct">10,58%</span></td></tr>
-          <tr style="font-weight: 700; background: rgba(255,255,255,0.05)">
-            <td>Total Geral</td><td class="text-right">19.189</td><td class="text-right"><span class="badge-pct">100,00%</span></td>
-          </tr>
-        </tbody>
+        <tbody id="tblRecPlanta"></tbody>
       </table>
 
       <div class="media-box">
         <h4>Média Diária (Entradas)</h4>
-        <div class="media-grid">
-          <div class="media-item"><span>Geral</span><strong>959</strong></div>
-          <div class="media-item"><span>Joinville</span><strong>587</strong></div>
-          <div class="media-item"><span>Rio Claro</span><strong>271</strong></div>
-          <div class="media-item"><span>Manaus</span><strong>101</strong></div>
-        </div>
+        <div class="media-grid" id="mediaRecGrid"></div>
       </div>
     </div>
 
   </div>
 
-  <!-- TABELA COMPLETA POR FAMÍLIA COM COLUNA DE SALDO -->
+  <!-- TABELA POR FAMÍLIA -->
   <div class="glass-card">
     <div class="section-title"><div class="dot" style="background: var(--accent-blue)"></div> Comparativo por Família de Produtos</div>
     <table>
@@ -507,27 +444,173 @@
           <th class="text-right">Saldo (Entradas - Saídas)</th>
         </tr>
       </thead>
-      <tbody>
-        <tr><td>Refrigerador</td><td class="text-right">7.998</td><td class="text-right">10.301</td><td class="text-right"><span class="badge-saldo-pos">+2.303</span></td></tr>
-        <tr><td>Lavadora</td><td class="text-right">3.118</td><td class="text-right">3.020</td><td class="text-right"><span class="badge-saldo-neg">-98</span></td></tr>
-        <tr><td>Fogão</td><td class="text-right">1.753</td><td class="text-right">1.769</td><td class="text-right"><span class="badge-saldo-pos">+16</span></td></tr>
-        <tr><td>Freezer</td><td class="text-right">1.068</td><td class="text-right">1.276</td><td class="text-right"><span class="badge-saldo-pos">+208</span></td></tr>
-        <tr><td>M.Ondas</td><td class="text-right">441</td><td class="text-right">1.705</td><td class="text-right"><span class="badge-saldo-pos">+1.264</span></td></tr>
-        <tr><td>L.Louça</td><td class="text-right">328</td><td class="text-right">267</td><td class="text-right"><span class="badge-saldo-neg">-61</span></td></tr>
-        <tr><td>Forno</td><td class="text-right">293</td><td class="text-right">432</td><td class="text-right"><span class="badge-saldo-pos">+139</span></td></tr>
-        <tr><td>Cooktop</td><td class="text-right">226</td><td class="text-right">170</td><td class="text-right"><span class="badge-saldo-neg">-56</span></td></tr>
-        <tr><td>Frigobar</td><td class="text-right">178</td><td class="text-right">136</td><td class="text-right"><span class="badge-saldo-neg">-42</span></td></tr>
-        <tr><td>Cervejeira</td><td class="text-right">93</td><td class="text-right">26</td><td class="text-right"><span class="badge-saldo-neg">-67</span></td></tr>
-        <tr><td>Arcondicionado</td><td class="text-right">61</td><td class="text-right">57</td><td class="text-right"><span class="badge-saldo-neg">-4</span></td></tr>
-        <tr><td>Secadora</td><td class="text-right">16</td><td class="text-right">30</td><td class="text-right"><span class="badge-saldo-pos">+14</span></td></tr>
-        <tr style="font-weight: 700; background: rgba(255,255,255,0.05)">
-          <td>Total Geral</td><td class="text-right">15.573</td><td class="text-right">19.189</td><td class="text-right"><span class="badge-saldo-pos">+3.616</span></td>
-        </tr>
-      </tbody>
+      <tbody id="tblFamilia"></tbody>
     </table>
   </div>
 
 </div>
+
+<script>
+  // BANCO DE DADOS EXTRAÍDO DIRETAMENTE DA PLANILHA EXCEL
+  const db = {
+    "09/2026": {
+      recTotal: 11797, expTotal: 10734,
+      recSub: "Total de Entradas (P.A)", expSub: "Total Saídas (Transp.)",
+      malhaSaida: 73, malhaSaidaSub: "Vol. Saída",
+      malhaEntrada: 0, malhaEntradaSub: "Vol. Entrada",
+      devCliente: 200, devPlanta: 100,
+      recPlantas: [
+        { name: "Joinville", qty: 7110, pct: "60,27%" },
+        { name: "Rio Claro", qty: 4687, pct: "39,73%" },
+        { name: "Manaus", qty: 0, pct: "0,00%" }
+      ],
+      expPlantas: [
+        { name: "Joinville", qty: 7036, pct: "65,55%" },
+        { name: "Rio Claro", qty: 3306, pct: "30,80%" },
+        { name: "Manaus", qty: 392, pct: "3,65%" }
+      ],
+      recMedias: { geral: 562, joinville: 356, rioClaro: 590, manaus: 234 },
+      expMedias: { geral: 511, joinville: 335, rioClaro: 157, manaus: 19 },
+      familias: [
+        { name: "Refrigerador", exp: 6002, rec: 6181, pctExp: "55,92%" },
+        { name: "Lavadora", exp: 1769, rec: 2811, pctExp: "16,48%" },
+        { name: "Fogão", exp: 1107, rec: 1401, pctExp: "10,31%" },
+        { name: "Freezer", exp: 939, rec: 727, pctExp: "8,75%" },
+        { name: "Forno", exp: 277, rec: 189, pctExp: "2,58%" },
+        { name: "M.Ondas", exp: 197, rec: 0, pctExp: "1,84%" },
+        { name: "Cooktop", exp: 149, rec: 282, pctExp: "1,39%" },
+        { name: "L.Louça", exp: 134, rec: 0, pctExp: "1,25%" },
+        { name: "Arcondicionado", exp: 61, rec: 0, pctExp: "0,57%" },
+        { name: "Cervejeira", exp: 53, rec: 57, pctExp: "0,49%" },
+        { name: "Frigobar", exp: 42, rec: 145, pctExp: "0,39%" },
+        { name: "Secadora", exp: 4, rec: 4, pctExp: "0,04%" }
+      ]
+    },
+    "08/2026": {
+      recTotal: 19189, expTotal: 15573,
+      recSub: "Total de Entradas (P.A)", expSub: "Total Saídas (234 Transp.)",
+      malhaSaida: 172, malhaSaidaSub: "Vol. Saída (4 Transp.)",
+      malhaEntrada: 332, malhaEntradaSub: "Vol. Entrada (2 Transp.)",
+      devCliente: 404, devPlanta: 253,
+      recPlantas: [
+        { name: "Joinville", qty: 11739, pct: "61,17%" },
+        { name: "Rio Claro", qty: 5421, pct: "28,25%" },
+        { name: "Manaus", qty: 2029, pct: "10,58%" }
+      ],
+      expPlantas: [
+        { name: "Joinville", qty: 9337, pct: "59,96%" },
+        { name: "Rio Claro", qty: 5406, pct: "34,71%" },
+        { name: "Manaus", qty: 830, pct: "5,33%" }
+      ],
+      recMedias: { geral: 959, joinville: 587, rioClaro: 271, manaus: 101 },
+      expMedias: { geral: 779, joinville: 467, rioClaro: 270, manaus: 42 },
+      familias: [
+        { name: "Refrigerador", exp: 7998, rec: 10301, pctExp: "51,36%" },
+        { name: "Lavadora", exp: 3118, rec: 3020, pctExp: "20,02%" },
+        { name: "Fogão", exp: 1753, rec: 1769, pctExp: "11,26%" },
+        { name: "Freezer", exp: 1068, rec: 1276, pctExp: "6,86%" },
+        { name: "M.Ondas", exp: 441, rec: 1705, pctExp: "2,83%" },
+        { name: "L.Louça", exp: 328, rec: 267, pctExp: "2,11%" },
+        { name: "Forno", exp: 293, rec: 432, pctExp: "1,88%" },
+        { name: "Cooktop", exp: 226, rec: 170, pctExp: "1,45%" },
+        { name: "Frigobar", exp: 178, rec: 136, pctExp: "1,14%" },
+        { name: "Cervejeira", exp: 93, rec: 26, pctExp: "0,60%" },
+        { name: "Arcondicionado", exp: 61, rec: 57, pctExp: "0,39%" },
+        { name: "Secadora", exp: 16, rec: 30, pctExp: "0,10%" }
+      ]
+    }
+  };
+
+  function fmt(n) { return n.toLocaleString('pt-BR'); }
+
+  function updateDashboard(m) {
+    const data = db[m];
+    if(!data) return;
+
+    // KPIs
+    document.getElementById('kpiRec').innerText = fmt(data.recTotal);
+    document.getElementById('kpiRecSub').innerText = data.recSub;
+    document.getElementById('kpiExp').innerText = fmt(data.expTotal);
+    document.getElementById('kpiExpSub').innerText = data.expSub;
+    document.getElementById('kpiMalhaSaida').innerText = fmt(data.malhaSaida);
+    document.getElementById('kpiMalhaSaidaSub').innerText = data.malhaSaidaSub;
+    document.getElementById('kpiMalhaEntrada').innerText = fmt(data.malhaEntrada);
+    document.getElementById('kpiMalhaEntradaSub').innerText = data.malhaEntradaSub;
+    document.getElementById('kpiDevCliente').innerText = fmt(data.devCliente);
+    document.getElementById('kpiDevPlanta').innerText = fmt(data.devPlanta);
+
+    // TICKER
+    let tickerHTML = '';
+    const buildItems = () => data.familias.map(f => `
+      <div class="ticker-item">
+        <span class="ticker-label">${f.name}</span>
+        <span class="ticker-value">${fmt(f.exp)} un</span>
+        <span class="ticker-pct">${f.pctExp}</span>
+      </div>`).join('');
+    tickerHTML = buildItems() + buildItems(); // Duplica para loop contínuo
+    document.getElementById('tickerTrack').innerHTML = tickerHTML;
+
+    // TABELA EXPEDIÇÕES PLANTA
+    let expHtml = '';
+    data.expPlantas.forEach(p => {
+      expHtml += `<tr><td>${p.name}</td><td class="text-right">${fmt(p.qty)}</td><td class="text-right"><span class="badge-pct purple">${p.pct}</span></td></tr>`;
+    });
+    expHtml += `<tr style="font-weight: 700; background: rgba(255,255,255,0.05)"><td>Total Geral</td><td class="text-right">${fmt(data.expTotal)}</td><td class="text-right"><span class="badge-pct purple">100,00%</span></td></tr>`;
+    document.getElementById('tblExpPlanta').innerHTML = expHtml;
+
+    // TABELA RECEBIMENTOS PLANTA
+    let recHtml = '';
+    data.recPlantas.forEach(p => {
+      recHtml += `<tr><td>${p.name}</td><td class="text-right">${fmt(p.qty)}</td><td class="text-right"><span class="badge-pct">${p.pct}</span></td></tr>`;
+    });
+    recHtml += `<tr style="font-weight: 700; background: rgba(255,255,255,0.05)"><td>Total Geral</td><td class="text-right">${fmt(data.recTotal)}</td><td class="text-right"><span class="badge-pct">100,00%</span></td></tr>`;
+    document.getElementById('tblRecPlanta').innerHTML = recHtml;
+
+    // MÉDIAS DIÁRIAS
+    document.getElementById('mediaExpGrid').innerHTML = `
+      <div class="media-item"><span>Geral</span><strong>${fmt(data.expMedias.geral)}</strong></div>
+      <div class="media-item"><span>Joinville</span><strong>${fmt(data.expMedias.joinville)}</strong></div>
+      <div class="media-item"><span>Rio Claro</span><strong>${fmt(data.expMedias.rioClaro)}</strong></div>
+      <div class="media-item"><span>Manaus</span><strong>${fmt(data.expMedias.manaus)}</strong></div>`;
+
+    document.getElementById('mediaRecGrid').innerHTML = `
+      <div class="media-item"><span>Geral</span><strong>${fmt(data.recMedias.geral)}</strong></div>
+      <div class="media-item"><span>Joinville</span><strong>${fmt(data.recMedias.joinville)}</strong></div>
+      <div class="media-item"><span>Rio Claro</span><strong>${fmt(data.recMedias.rioClaro)}</strong></div>
+      <div class="media-item"><span>Manaus</span><strong>${fmt(data.recMedias.manaus)}</strong></div>`;
+
+    // TABELA FAMÍLIA COM SALDO
+    let famHtml = '';
+    let totExp = 0, totRec = 0;
+    data.familias.forEach(f => {
+      totExp += f.exp; totRec += f.rec;
+      const saldo = f.rec - f.exp;
+      const badgeClass = saldo >= 0 ? 'badge-saldo-pos' : 'badge-saldo-neg';
+      const sign = saldo >= 0 ? '+' : '';
+      famHtml += `
+        <tr>
+          <td>${f.name}</td>
+          <td class="text-right">${fmt(f.exp)}</td>
+          <td class="text-right">${fmt(f.rec)}</td>
+          <td class="text-right"><span class="${badgeClass}">${sign}${fmt(saldo)}</span></td>
+        </tr>`;
+    });
+    const totSaldo = totRec - totExp;
+    const totBadgeClass = totSaldo >= 0 ? 'badge-saldo-pos' : 'badge-saldo-neg';
+    const totSign = totSaldo >= 0 ? '+' : '';
+    famHtml += `
+      <tr style="font-weight: 700; background: rgba(255,255,255,0.05)">
+        <td>Total Geral</td>
+        <td class="text-right">${fmt(totExp)}</td>
+        <td class="text-right">${fmt(totRec)}</td>
+        <td class="text-right"><span class="${totBadgeClass}">${totSign}${fmt(totSaldo)}</span></td>
+      </tr>`;
+    document.getElementById('tblFamilia').innerHTML = famHtml;
+  }
+
+  // Inicializar com Setembro
+  updateDashboard('09/2026');
+</script>
 
 </body>
 </html>
