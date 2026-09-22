@@ -161,13 +161,16 @@
       100% { transform: translateX(-50%); }
     }
 
-    /* KPIS GRID (4 COLUNAS RESPONSIVAS) */
+    /* KPIS GRID (4 COLUNAS PERFEITAS / 2 LINHAS HARMONIOSAS) */
     .kpi-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      grid-template-columns: repeat(4, 1fr);
       gap: 16px;
       margin-bottom: 24px;
     }
+
+    @media (max-width: 1024px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .kpi-grid { grid-template-columns: 1fr; } }
 
     .kpi-card {
       position: relative;
@@ -185,7 +188,11 @@
     .kpi-card.orange::before { background: linear-gradient(90deg, var(--accent-orange), #ef4444); }
     .kpi-card.red::before { background: linear-gradient(90deg, #ef4444, #f43f5e); }
     .kpi-card.blue::before { background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan)); }
-    .kpi-card.teal::before { background: linear-gradient(90deg, var(--accent-teal), var(--accent-cyan)); }
+    
+    /* CARD DESEMBARQUE - CRÍTICO / ALERTA */
+    .kpi-card.critical::before {
+      background: linear-gradient(90deg, #ef4444, #dc2626);
+    }
 
     .kpi-title {
       color: var(--text-muted);
@@ -199,6 +206,11 @@
       font-size: 1.7rem;
       font-weight: 700;
       margin: 10px 0 4px 0;
+    }
+
+    .kpi-value.text-red {
+      color: #ef4444;
+      text-shadow: 0 0 12px rgba(239, 68, 68, 0.25);
     }
 
     .kpi-sub {
@@ -374,7 +386,7 @@
     <div class="ticker-track" id="tickerTrack"></div>
   </div>
 
-  <!-- CARDS KPIS (7 CARDS) -->
+  <!-- CARDS KPIS (LAYOUT 4x2 SIMÉTRICO E ALINHADO) -->
   <div class="kpi-grid">
     <div class="kpi-card glass-card green">
       <div class="kpi-title">Total Recebimentos</div>
@@ -386,9 +398,9 @@
       <div class="kpi-value" id="kpiExp">0</div>
       <div class="kpi-sub" id="kpiExpSub">Total Saídas</div>
     </div>
-    <div class="kpi-card glass-card teal">
-      <div class="kpi-title">Desembarque</div>
-      <div class="kpi-value" id="kpiDesemb">0</div>
+    <div class="kpi-card glass-card critical">
+      <div class="kpi-title" style="color: #fca5a5;">⚠️ Desembarque (Gargalo)</div>
+      <div class="kpi-value text-red" id="kpiDesemb">0</div>
       <div class="kpi-sub" id="kpiDesembSub">Qtd. Vol. / Média Dia</div>
     </div>
     <div class="kpi-card glass-card blue">
@@ -406,7 +418,7 @@
       <div class="kpi-value" id="kpiDevCliente">0</div>
       <div class="kpi-sub">Volume de Processo</div>
     </div>
-    <div class="kpi-card glass-card red">
+    <div class="kpi-card glass-card red" style="grid-column: span 2;">
       <div class="kpi-title">Devolução Planta</div>
       <div class="kpi-value" id="kpiDevPlanta">0</div>
       <div class="kpi-sub">Volume de Processo</div>
