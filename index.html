@@ -374,7 +374,7 @@
 
 <div class="dashboard-container">
 
-  <!-- HEADER COM NOVO TÍTULO -->
+  <!-- HEADER -->
   <div class="header">
     <div class="header-title">
       <h1>Fechamento Mensal Alhandra</h1>
@@ -433,7 +433,7 @@
     </div>
   </div>
 
-  <!-- GRÁFICO DINÂMICO DE EVOLUÇÃO DIÁRIA -->
+  <!-- GRÁFICO DINÂMICO LIMPO (SEM LINHAS DE GRADE) -->
   <div class="glass-card">
     <div class="section-title">
       <div class="dot" style="background: var(--accent-cyan)"></div>
@@ -636,13 +636,12 @@
     const recData = dailyData.map(d => d.rec);
     const expData = dailyData.map(d => d.exp);
 
-    // Gradientes de fundo
     const gradCyan = ctx.createLinearGradient(0, 0, 0, 300);
-    gradCyan.addColorStop(0, 'rgba(6, 182, 212, 0.3)');
+    gradCyan.addColorStop(0, 'rgba(6, 182, 212, 0.35)');
     gradCyan.addColorStop(1, 'rgba(6, 182, 212, 0.0)');
 
     const gradPurple = ctx.createLinearGradient(0, 0, 0, 300);
-    gradPurple.addColorStop(0, 'rgba(139, 92, 246, 0.3)');
+    gradPurple.addColorStop(0, 'rgba(139, 92, 246, 0.35)');
     gradPurple.addColorStop(1, 'rgba(139, 92, 246, 0.0)');
 
     if (dailyChart) {
@@ -665,7 +664,7 @@
               fill: true,
               tension: 0.3,
               pointRadius: 4,
-              pointHoverRadius: 6,
+              pointHoverRadius: 7,
               pointBackgroundColor: '#06b6d4'
             },
             {
@@ -677,7 +676,7 @@
               fill: true,
               tension: 0.3,
               pointRadius: 4,
-              pointHoverRadius: 6,
+              pointHoverRadius: 7,
               pointBackgroundColor: '#8b5cf6'
             }
           ]
@@ -706,11 +705,11 @@
           scales: {
             x: {
               ticks: { color: '#94a3b8', font: { family: 'Google Sans Mono', size: 11 } },
-              grid: { color: 'rgba(255, 255, 255, 0.03)' }
+              grid: { display: false } // REMOVIDAS AS LINHAS DE GRADE VERTICAIS
             },
             y: {
               ticks: { color: '#94a3b8', font: { family: 'Google Sans Mono', size: 11 } },
-              grid: { color: 'rgba(255, 255, 255, 0.05)' }
+              grid: { display: false } // REMOVIDAS AS LINHAS DE GRADE HORIZONTAIS
             }
           }
         }
