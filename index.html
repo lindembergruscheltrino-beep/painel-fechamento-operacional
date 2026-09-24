@@ -162,7 +162,7 @@
       100% { transform: translateX(-50%); }
     }
 
-    /* KPIS GRID */
+    /* KPIS GRID (4 COLUNAS EXATAS - 8 CARDS PERFECT ALIGN) */
     .kpi-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -189,6 +189,7 @@
     .kpi-card.orange::before { background: linear-gradient(90deg, var(--accent-orange), #ef4444); }
     .kpi-card.red::before { background: linear-gradient(90deg, #ef4444, #f43f5e); }
     .kpi-card.blue::before { background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan)); }
+    .kpi-card.teal::before { background: linear-gradient(90deg, var(--accent-teal), var(--accent-green)); }
     
     .kpi-card.critical::before {
       background: linear-gradient(90deg, #ef4444, #dc2626);
@@ -277,7 +278,7 @@
     .text-center { text-align: center; }
     .text-right { text-align: right; }
 
-    /* ESTILOS DAS BARRAS DE PROGRESSO */
+    /* BARRAS DE PROGRESSO */
     .progress-bar-container {
       width: 100%;
       height: 7px;
@@ -394,7 +395,7 @@
     <div class="ticker-track" id="tickerTrack"></div>
   </div>
 
-  <!-- CARDS KPIS -->
+  <!-- CARDS KPIS (GRID 4x2 - 8 CARDS) -->
   <div class="kpi-grid">
     <div class="kpi-card glass-card green">
       <div class="kpi-title">Total Recebimentos</div>
@@ -405,6 +406,11 @@
       <div class="kpi-title">Total Expedições</div>
       <div class="kpi-value" id="kpiExp">0</div>
       <div class="kpi-sub" id="kpiExpSub">Total Saídas</div>
+    </div>
+    <div class="kpi-card glass-card teal">
+      <div class="kpi-title">Acurácia de Estoque</div>
+      <div class="kpi-value" id="kpiAcuracia">100%</div>
+      <div class="kpi-sub" id="kpiAcuraciaSub">Inventário Físico</div>
     </div>
     <div class="kpi-card glass-card critical">
       <div class="kpi-title" style="color: #fca5a5;">⚠️ Desembarque (Gargalo)</div>
@@ -426,14 +432,14 @@
       <div class="kpi-value" id="kpiDevCliente">0</div>
       <div class="kpi-sub">Volume de Processo</div>
     </div>
-    <div class="kpi-card glass-card red" style="grid-column: span 2;">
+    <div class="kpi-card glass-card red">
       <div class="kpi-title">Devolução Planta</div>
       <div class="kpi-value" id="kpiDevPlanta">0</div>
       <div class="kpi-sub">Volume de Processo</div>
     </div>
   </div>
 
-  <!-- GRÁFICO DINÂMICO LIMPO (SEM LINHAS DE GRADE) -->
+  <!-- GRÁFICO DINÂMICO DE EVOLUÇÃO DIÁRIA -->
   <div class="glass-card">
     <div class="section-title">
       <div class="dot" style="background: var(--accent-cyan)"></div>
@@ -515,7 +521,8 @@
   const db = {
     "09/2026": {
       recTotal: 11797, expTotal: 10734,
-      desembTotal: 264, desembSub: "Média: 12,6/dia (21 dias úteis)",
+      acuracia: "100%", acuraciaSub: "Inventário Físico OK",
+      desembTotal: 264, desembSub: "Média: 12,6/dia (21 dias)",
       recSub: "Total de Entradas (P.A)", expSub: "Total Saídas (Transp.)",
       malhaSaida: 73, malhaSaidaSub: "Vol. Saída",
       malhaEntrada: 0, malhaEntradaSub: "Vol. Entrada",
@@ -568,7 +575,8 @@
     },
     "08/2026": {
       recTotal: 19189, expTotal: 15573,
-      desembTotal: 322, desembSub: "Média: 16,1/dia (20 dias úteis)",
+      acuracia: "100%", acuraciaSub: "Inventário Físico OK",
+      desembTotal: 322, desembSub: "Média: 16,1/dia (20 dias)",
       recSub: "Total de Entradas (P.A)", expSub: "Total Saídas (234 Transp.)",
       malhaSaida: 172, malhaSaidaSub: "Vol. Saída (4 Transp.)",
       malhaEntrada: 332, malhaEntradaSub: "Vol. Entrada (2 Transp.)",
@@ -626,7 +634,7 @@
     }
   };
 
-  function fmt(n) { return n.toLocaleString('pt-BR'); }
+  function fmt(n) { return typeof n === 'number' ? n.toLocaleString('pt-BR') : n; }
 
   let dailyChart = null;
 
@@ -705,11 +713,11 @@
           scales: {
             x: {
               ticks: { color: '#94a3b8', font: { family: 'Google Sans Mono', size: 11 } },
-              grid: { display: false } // REMOVIDAS AS LINHAS DE GRADE VERTICAIS
+              grid: { display: false }
             },
             y: {
               ticks: { color: '#94a3b8', font: { family: 'Google Sans Mono', size: 11 } },
-              grid: { display: false } // REMOVIDAS AS LINHAS DE GRADE HORIZONTAIS
+              grid: { display: false }
             }
           }
         }
@@ -726,6 +734,8 @@
     document.getElementById('kpiRecSub').innerText = data.recSub;
     document.getElementById('kpiExp').innerText = fmt(data.expTotal);
     document.getElementById('kpiExpSub').innerText = data.expSub;
+    document.getElementById('kpiAcuracia').innerText = data.acuracia;
+    document.getElementById('kpiAcuraciaSub').innerText = data.acuraciaSub;
     document.getElementById('kpiDesemb').innerText = fmt(data.desembTotal);
     document.getElementById('kpiDesembSub').innerText = data.desembSub;
     document.getElementById('kpiMalhaSaida').innerText = fmt(data.malhaSaida);
