@@ -162,7 +162,7 @@
       100% { transform: translateX(-50%); }
     }
 
-    /* KPIS GRID (4 COLUNAS EXATAS - 8 CARDS PERFECT ALIGN) */
+    /* KPIS GRID (4 COLUNAS EXATAS - 8 CARDS) */
     .kpi-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -395,7 +395,7 @@
     <div class="ticker-track" id="tickerTrack"></div>
   </div>
 
-  <!-- CARDS KPIS (GRID 4x2 - 8 CARDS) -->
+  <!-- CARDS KPIS -->
   <div class="kpi-grid">
     <div class="kpi-card glass-card green">
       <div class="kpi-title">Total Recebimentos</div>
@@ -410,7 +410,7 @@
     <div class="kpi-card glass-card teal">
       <div class="kpi-title">Acurácia de Estoque</div>
       <div class="kpi-value" id="kpiAcuracia">100%</div>
-      <div class="kpi-sub" id="kpiAcuraciaSub">Inventário Físico</div>
+      <div class="kpi-sub" id="kpiAcuraciaSub">Físico vs Contábil</div>
     </div>
     <div class="kpi-card glass-card critical">
       <div class="kpi-title" style="color: #fca5a5;">⚠️ Desembarque (Gargalo)</div>
@@ -521,7 +521,7 @@
   const db = {
     "09/2026": {
       recTotal: 11797, expTotal: 10734,
-      acuracia: "100%", acuraciaSub: "Inventário Físico OK",
+      acuracia: "100%", acuraciaSub: "Físico vs Contábil",
       desembTotal: 264, desembSub: "Média: 12,6/dia (21 dias)",
       recSub: "Total de Entradas (P.A)", expSub: "Total Saídas (Transp.)",
       malhaSaida: 73, malhaSaidaSub: "Vol. Saída",
@@ -575,7 +575,7 @@
     },
     "08/2026": {
       recTotal: 19189, expTotal: 15573,
-      acuracia: "100%", acuraciaSub: "Inventário Físico OK",
+      acuracia: "100%", acuraciaSub: "Físico vs Contábil",
       desembTotal: 322, desembSub: "Média: 16,1/dia (20 dias)",
       recSub: "Total de Entradas (P.A)", expSub: "Total Saídas (234 Transp.)",
       malhaSaida: 172, malhaSaidaSub: "Vol. Saída (4 Transp.)",
