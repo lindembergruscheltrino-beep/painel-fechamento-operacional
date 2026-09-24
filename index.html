@@ -17,7 +17,7 @@
       --accent-cyan: #06b6d4;
       --accent-blue: #3b82f6;
       --accent-green: #10b981;
-      --accent-orange: #f97316;
+      --accent-orange: #f59e0b;
       --accent-red: #ef4444;
       --accent-teal: #14b8a6;
     }
@@ -468,7 +468,7 @@
 
   </div>
 
-  <!-- NOVO GRÁFICO: ANÁLISE POR FAMÍLIA -->
+  <!-- GRÁFICO: ANÁLISE POR FAMÍLIA -->
   <div class="glass-card">
     <div class="section-title">
       <div class="dot" style="background: var(--accent-blue)"></div>
@@ -662,7 +662,10 @@
               position: 'top',
               labels: {
                 color: '#94a3b8',
-                font: { family: 'Google Sans Mono', size: 12 }
+                font: { family: 'Google Sans Mono', size: 12 },
+                usePointStyle: true,
+                boxWidth: 8,
+                boxHeight: 8
               }
             },
             tooltip: {
@@ -696,9 +699,9 @@
     const expData = familiasData.map(f => f.exp);
     const recData = familiasData.map(f => f.rec);
 
-    const gradOrange = ctx.createLinearGradient(0, 0, 0, 350);
-    gradOrange.addColorStop(0, 'rgba(249, 115, 22, 0.25)');
-    gradOrange.addColorStop(1, 'rgba(249, 115, 22, 0.0)');
+    const gradPurple = ctx.createLinearGradient(0, 0, 0, 350);
+    gradPurple.addColorStop(0, 'rgba(139, 92, 246, 0.25)');
+    gradPurple.addColorStop(1, 'rgba(139, 92, 246, 0.0)');
 
     if (familyChart) {
       familyChart.data.labels = labels;
@@ -714,26 +717,26 @@
             {
               label: 'Saídas',
               data: expData,
-              borderColor: '#f97316',
-              backgroundColor: gradOrange,
+              borderColor: '#8b5cf6',
+              backgroundColor: gradPurple,
               borderWidth: 3,
               fill: true,
               tension: 0.35,
-              pointRadius: 5,
-              pointHoverRadius: 8,
-              pointBackgroundColor: '#f97316'
+              pointRadius: 3.5,
+              pointHoverRadius: 6,
+              pointBackgroundColor: '#8b5cf6'
             },
             {
               label: 'Entradas',
               data: recData,
-              borderColor: '#10b981',
+              borderColor: '#06b6d4',
               backgroundColor: 'transparent',
               borderWidth: 3,
               fill: false,
               tension: 0.35,
-              pointRadius: 5,
-              pointHoverRadius: 8,
-              pointBackgroundColor: '#10b981'
+              pointRadius: 3.5,
+              pointHoverRadius: 6,
+              pointBackgroundColor: '#06b6d4'
             }
           ]
         },
@@ -749,7 +752,9 @@
                 usePointStyle: true,
                 pointStyle: 'circle',
                 boxWidth: 8,
-                font: { family: 'Google Sans Mono', size: 13, weight: '700' }
+                boxHeight: 8,
+                padding: 16,
+                font: { family: 'Google Sans Mono', size: 12, weight: '700' }
               }
             },
             tooltip: {
