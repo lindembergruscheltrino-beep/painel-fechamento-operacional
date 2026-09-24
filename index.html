@@ -17,7 +17,7 @@
       --accent-cyan: #06b6d4;
       --accent-blue: #3b82f6;
       --accent-green: #10b981;
-      --accent-orange: #f59e0b;
+      --accent-orange: #f97316;
       --accent-red: #ef4444;
       --accent-teal: #14b8a6;
     }
@@ -219,10 +219,17 @@
       color: var(--text-muted);
     }
 
-    /* CHART CONTAINER */
+    /* CHART CONTAINERS */
     .chart-container-box {
       position: relative;
       height: 320px;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .family-chart-box {
+      position: relative;
+      height: 380px;
       width: 100%;
       margin-top: 10px;
     }
@@ -296,44 +303,6 @@
 
     .progress-bar-fill.purple { background: var(--accent-purple); }
     .progress-bar-fill.cyan { background: var(--accent-cyan); }
-
-    /* BARRA DE SALDO BIPOLAR */
-    .saldo-cell {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 12px;
-    }
-
-    .saldo-track {
-      position: relative;
-      width: 100px;
-      height: 6px;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
-    .saldo-center-line {
-      position: absolute;
-      left: 50%; top: 0; width: 2px; height: 100%;
-      background: rgba(255, 255, 255, 0.2);
-    }
-
-    .saldo-bar {
-      position: absolute; top: 0; height: 100%;
-      border-radius: 4px; transition: all 0.3s ease;
-    }
-
-    .saldo-bar.pos { left: 50%; background: var(--accent-green); }
-    .saldo-bar.neg { right: 50%; background: var(--accent-red); }
-
-    .saldo-num {
-      font-weight: 700; min-width: 60px; text-align: right;
-    }
-
-    .saldo-num.pos { color: #34d399; }
-    .saldo-num.neg { color: #fca5a5; }
 
     /* MEDIA DIARIA BOX */
     .media-box {
@@ -499,20 +468,15 @@
 
   </div>
 
-  <!-- TABELA POR FAMÍLIA -->
+  <!-- NOVO GRÁFICO: ANÁLISE POR FAMÍLIA -->
   <div class="glass-card">
-    <div class="section-title"><div class="dot" style="background: var(--accent-blue)"></div> Análise Por Família</div>
-    <table>
-      <thead>
-        <tr>
-          <th>Família</th>
-          <th class="text-right">Saídas (Qtd.)</th>
-          <th class="text-right">Entradas (Qtd.)</th>
-          <th class="text-right">Saldo (Entradas - Saídas)</th>
-        </tr>
-      </thead>
-      <tbody id="tblFamilia"></tbody>
-    </table>
+    <div class="section-title">
+      <div class="dot" style="background: var(--accent-blue)"></div>
+      Análise Por Família
+    </div>
+    <div class="family-chart-box">
+      <canvas id="familyChart"></canvas>
+    </div>
   </div>
 
 </div>
@@ -637,8 +601,9 @@
   function fmt(n) { return typeof n === 'number' ? n.toLocaleString('pt-BR') : n; }
 
   let dailyChart = null;
+  let familyChart = null;
 
-  function initOrUpdateChart(dailyData) {
+  function initOrUpdateDailyChart(dailyData) {
     const ctx = document.getElementById('dailyChart').getContext('2d');
     const labels = dailyData.map(d => d.label);
     const recData = dailyData.map(d => d.rec);
@@ -725,6 +690,93 @@
     }
   }
 
+  function initOrUpdateFamilyChart(familiasData) {
+    const ctx = document.getElementById('familyChart').getContext('2d');
+    const labels = familiasData.map(f => f.name);
+    const expData = familiasData.map(f => f.exp);
+    const recData = familiasData.map(f => f.rec);
+
+    const gradOrange = ctx.createLinearGradient(0, 0, 0, 350);
+    gradOrange.addColorStop(0, 'rgba(249, 115, 22, 0.25)');
+    gradOrange.addColorStop(1, 'rgba(249, 115, 22, 0.0)');
+
+    if (familyChart) {
+      familyChart.data.labels = labels;
+      familyChart.data.datasets[0].data = expData;
+      familyChart.data.datasets[1].data = recData;
+      familyChart.update();
+    } else {
+      familyChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Saídas',
+              data: expData,
+              borderColor: '#f97316',
+              backgroundColor: gradOrange,
+              borderWidth: 3,
+              fill: true,
+              tension: 0.35,
+              pointRadius: 5,
+              pointHoverRadius: 8,
+              pointBackgroundColor: '#f97316'
+            },
+            {
+              label: 'Entradas',
+              data: recData,
+              borderColor: '#10b981',
+              backgroundColor: 'transparent',
+              borderWidth: 3,
+              fill: false,
+              tension: 0.35,
+              pointRadius: 5,
+              pointHoverRadius: 8,
+              pointBackgroundColor: '#10b981'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+              align: 'start',
+              labels: {
+                color: '#f8fafc',
+                usePointStyle: true,
+                pointStyle: 'circle',
+                boxWidth: 8,
+                font: { family: 'Google Sans Mono', size: 13, weight: '700' }
+              }
+            },
+            tooltip: {
+              mode: 'index',
+              intersect: false,
+              backgroundColor: '#172033',
+              titleColor: '#f8fafc',
+              bodyColor: '#94a3b8',
+              borderColor: 'rgba(255,255,255,0.1)',
+              borderWidth: 1
+            }
+          },
+          scales: {
+            x: {
+              ticks: { color: '#94a3b8', font: { family: 'Google Sans Mono', size: 10 }, maxRotation: 25 },
+              grid: { display: false }
+            },
+            y: {
+              ticks: { color: '#94a3b8', font: { family: 'Google Sans Mono', size: 11 } },
+              grid: { color: 'rgba(255, 255, 255, 0.03)' }
+            }
+          }
+        }
+      });
+    }
+  }
+
   function updateDashboard(m) {
     const data = db[m];
     if(!data) return;
@@ -754,8 +806,9 @@
       </div>`).join('');
     document.getElementById('tickerTrack').innerHTML = buildItems() + buildItems();
 
-    // GRÁFICO DIÁRIO
-    initOrUpdateChart(data.daily);
+    // GRÁFICOS
+    initOrUpdateDailyChart(data.daily);
+    initOrUpdateFamilyChart(data.familias);
 
     // TABELA EXPEDIÇÕES PLANTA COM BARRA
     let expHtml = '';
@@ -805,56 +858,6 @@
       <div class="media-item"><span>Joinville</span><strong>${fmt(data.recMedias.joinville)}</strong></div>
       <div class="media-item"><span>Rio Claro</span><strong>${fmt(data.recMedias.rioClaro)}</strong></div>
       <div class="media-item"><span>Manaus</span><strong>${fmt(data.recMedias.manaus)}</strong></div>`;
-
-    // TABELA FAMÍLIA COM BARRA DE SALDO
-    let famHtml = '';
-    let totExp = 0, totRec = 0;
-    
-    const maxSaldo = Math.max(...data.familias.map(f => Math.abs(f.rec - f.exp)), 1);
-
-    data.familias.forEach(f => {
-      totExp += f.exp; totRec += f.rec;
-      const saldo = f.rec - f.exp;
-      const isPos = saldo >= 0;
-      const cls = isPos ? 'pos' : 'neg';
-      const sign = isPos ? '+' : '';
-      const barPct = Math.min((Math.abs(saldo) / maxSaldo) * 50, 50);
-
-      famHtml += `
-        <tr>
-          <td>${f.name}</td>
-          <td class="text-right">${fmt(f.exp)}</td>
-          <td class="text-right">${fmt(f.rec)}</td>
-          <td class="text-right">
-            <div class="saldo-cell">
-              <span class="saldo-num ${cls}">${sign}${fmt(saldo)}</span>
-              <div class="saldo-track">
-                <div class="saldo-center-line"></div>
-                <div class="saldo-bar ${cls}" style="width: ${barPct}%;"></div>
-              </div>
-            </div>
-          </td>
-        </tr>`;
-    });
-
-    const totSaldo = totRec - totExp;
-    const totCls = totSaldo >= 0 ? 'pos' : 'neg';
-    const totSign = totSaldo >= 0 ? '+' : '';
-
-    famHtml += `
-      <tr style="font-weight: 700; background: rgba(255,255,255,0.05)">
-        <td>Total Geral</td>
-        <td class="text-right">${fmt(totExp)}</td>
-        <td class="text-right">${fmt(totRec)}</td>
-        <td class="text-right">
-          <div class="saldo-cell">
-            <span class="saldo-num ${totCls}">${totSign}${fmt(totSaldo)}</span>
-            <div style="width: 100px;"></div>
-          </div>
-        </td>
-      </tr>`;
-
-    document.getElementById('tblFamilia').innerHTML = famHtml;
   }
 
   // Inicializar com Setembro
