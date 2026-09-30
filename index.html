@@ -660,6 +660,7 @@
           plugins: {
             legend: {
               position: 'top',
+              align: 'center',
               labels: {
                 color: '#94a3b8',
                 font: { family: 'Google Sans Mono', size: 12 },
@@ -746,7 +747,7 @@
           plugins: {
             legend: {
               position: 'top',
-              align: 'start',
+              align: 'center', // MOVIDO PARA O CENTRO DO GRÁFICO
               labels: {
                 color: '#f8fafc',
                 usePointStyle: true,
@@ -770,11 +771,11 @@
           scales: {
             x: {
               ticks: { color: '#94a3b8', font: { family: 'Google Sans Mono', size: 10 }, maxRotation: 25 },
-              grid: { display: false } // REMOVIDO GRADE NO EIXO X
+              grid: { display: false }
             },
             y: {
               ticks: { color: '#94a3b8', font: { family: 'Google Sans Mono', size: 11 } },
-              grid: { display: false } // REMOVIDO GRADE NO EIXO Y (LINHAS HORIZONTAIS)
+              grid: { display: false }
             }
           }
         }
