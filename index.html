@@ -703,14 +703,14 @@
   function initOrUpdateFamilyChart(familiasData) {
     const ctx = document.getElementById('familyChart').getContext('2d');
     
-    // Destrói a instância anterior para aplicar a ordem do zero
+    // Destrói totalmente para não manter ordenação antiga do Canvas
     if (familyChart) {
       familyChart.destroy();
     }
 
-    // Ordenação do menor para o maior no Array:
-    // O Chart.js renderiza o último elemento do array no TOPO do eixo Y (sem precisar do reverse no Y-scale)
-    const sortedFamilias = [...familiasData].sort((a, b) => a.exp - b.exp);
+    // Ordenação ESTRITA decrescente por Saídas (b.exp - a.exp)
+    // Refrigerador (6.002) -> Lavadora (1.769) -> ... -> Secadora (4)
+    const sortedFamilias = [...familiasData].sort((a, b) => b.exp - a.exp);
 
     const labels = sortedFamilias.map(f => f.name);
     const recData = sortedFamilias.map(f => f.rec);
