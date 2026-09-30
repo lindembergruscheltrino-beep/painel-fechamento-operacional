@@ -164,7 +164,7 @@
       100% { transform: translateX(-50%); }
     }
 
-    /* KPIS GRID (4 COLUNAS EXATAS - 8 CARDS) */
+    /* KPIS GRID */
     .kpi-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -355,7 +355,7 @@
     <div class="filter-container">
       <label for="monthSelect">Mês de Consulta:</label>
       <select id="monthSelect" onchange="updateDashboard(this.value)">
-        <option value="09/2026" selected>09/2026 (Setembro)</option>
+        <option value="09/2026" selected>09/2026 (Setembro Consolidado)</option>
         <option value="08/2026">08/2026 (Agosto)</option>
       </select>
     </div>
@@ -488,13 +488,13 @@
 
   const db = {
     "09/2026": {
-      recTotal: 11797, expTotal: 10734,
+      recTotal: 16125, expTotal: 14665,
       acuracia: "100%", acuraciaSub: "Físico vs Contábil",
-      desembTotal: 264, desembSub: "Média: 12,6/dia (21 dias)",
+      desembTotal: 346, desembSub: "Média: 14,4/dia (24 dias)",
       recSub: "Total de Entradas (P.A)", expSub: "Total Saídas (Transp.)",
-      malhaSaida: 73, malhaSaidaSub: "Vol. Saída",
-      malhaEntrada: 0, malhaEntradaSub: "Vol. Entrada",
-      devCliente: 200, devPlanta: 100,
+      malhaSaida: 102, malhaSaidaSub: "Vol. Saída",
+      malhaEntrada: 252, malhaEntradaSub: "Vol. Entrada",
+      devCliente: 394, devPlanta: 100,
       daily: [
         { label: "01/09", rec: 214, exp: 64 },
         { label: "02/09", rec: 797, exp: 352 },
@@ -512,39 +512,46 @@
         { label: "17/09", rec: 337, exp: 777 },
         { label: "18/09", rec: 729, exp: 584 },
         { label: "21/09", rec: 744, exp: 853 },
-        { label: "22/09", rec: 714, exp: 51 }
+        { label: "22/09", rec: 878, exp: 589 },
+        { label: "23/09", rec: 246, exp: 558 },
+        { label: "24/09", rec: 186, exp: 370 },
+        { label: "25/09", rec: 712, exp: 404 },
+        { label: "26/09", rec: 370, exp: 417 },
+        { label: "28/09", rec: 1197, exp: 604 },
+        { label: "29/09", rec: 713, exp: 595 },
+        { label: "30/09", rec: 740, exp: 445 }
       ],
       recPlantas: [
-        { name: "Joinville", qty: 7110, pctNum: 60.27, pctStr: "60.27%" },
-        { name: "Rio Claro", qty: 4687, pctNum: 39.73, pctStr: "39.73%" },
+        { name: "Joinville", qty: 9956, pctNum: 61.74, pctStr: "61.74%" },
+        { name: "Rio Claro", qty: 6169, pctNum: 38.26, pctStr: "38.26%" },
         { name: "Manaus", qty: 0, pctNum: 0.00, pctStr: "0.00%" }
       ],
       expPlantas: [
-        { name: "Joinville", qty: 7036, pctNum: 65.55, pctStr: "65.55%" },
-        { name: "Rio Claro", qty: 3306, pctNum: 30.80, pctStr: "30.80%" },
-        { name: "Manaus", qty: 392, pctNum: 3.65, pctStr: "3.65%" }
+        { name: "Joinville", qty: 9340, pctNum: 63.69, pctStr: "63.69%" },
+        { name: "Rio Claro", qty: 4828, pctNum: 32.92, pctStr: "32.92%" },
+        { name: "Manaus", qty: 497, pctNum: 3.39, pctStr: "3.39%" }
       ],
-      recMedias: { geral: 562, joinville: 356, rioClaro: 590, manaus: 234 },
-      expMedias: { geral: 511, joinville: 335, rioClaro: 157, manaus: 19 },
+      recMedias: { geral: 701, joinville: 433, rioClaro: 268, manaus: 0 },
+      expMedias: { geral: 611, joinville: 389, rioClaro: 201, manaus: 21 },
       familias: [
-        { name: "Refrigerador", exp: 6002, rec: 6181, pctExp: "55.92%" },
-        { name: "Lavadora", exp: 1769, rec: 2811, pctExp: "16.48%" },
-        { name: "Fogão", exp: 1107, rec: 1401, pctExp: "10.31%" },
-        { name: "Freezer", exp: 939, rec: 727, pctExp: "8.75%" },
-        { name: "Forno", exp: 277, rec: 189, pctExp: "2.58%" },
-        { name: "M.Ondas", exp: 197, rec: 0, pctExp: "1.84%" },
-        { name: "Cooktop", exp: 149, rec: 282, pctExp: "1.39%" },
-        { name: "L.Louça", exp: 134, rec: 0, pctExp: "1.25%" },
-        { name: "Arcondicionado", exp: 61, rec: 0, pctExp: "0.57%" },
-        { name: "Cervejeira", exp: 53, rec: 57, pctExp: "0.49%" },
-        { name: "Frigobar", exp: 42, rec: 145, pctExp: "0.39%" },
-        { name: "Secadora", exp: 4, rec: 4, pctExp: "0.04%" }
+        { name: "Refrigerador", exp: 7846, rec: 8625, pctExp: "53.50%" },
+        { name: "Lavadora", exp: 2809, rec: 3535, pctExp: "19.15%" },
+        { name: "Fogão", exp: 1457, rec: 1995, pctExp: "9.93%" },
+        { name: "Freezer", exp: 1364, rec: 994, pctExp: "9.30%" },
+        { name: "Forno", exp: 350, rec: 303, pctExp: "2.39%" },
+        { name: "M.Ondas", exp: 248, rec: 0, pctExp: "1.69%" },
+        { name: "Cooktop", exp: 205, rec: 332, pctExp: "1.40%" },
+        { name: "L.Louça", exp: 168, rec: 0, pctExp: "1.15%" },
+        { name: "Arcondicionado", exp: 81, rec: 0, pctExp: "0.55%" },
+        { name: "Cervejeira", exp: 75, rec: 99, pctExp: "0.51%" },
+        { name: "Frigobar", exp: 55, rec: 238, pctExp: "0.38%" },
+        { name: "Secadora", exp: 7, rec: 4, pctExp: "0.05%" }
       ]
     },
     "08/2026": {
       recTotal: 19189, expTotal: 15573,
       acuracia: "100%", acuraciaSub: "Físico vs Contábil",
-      desembTotal: 322, desembSub: "Média: 16,1/dia (20 dias)",
+      desembTotal: 322, desembSub: "Média: 15,3/dia (21 dias)",
       recSub: "Total de Entradas (P.A)", expSub: "Total Saídas (234 Transp.)",
       malhaSaida: 172, malhaSaidaSub: "Vol. Saída (4 Transp.)",
       malhaEntrada: 332, malhaEntradaSub: "Vol. Entrada (2 Transp.)",
@@ -703,13 +710,10 @@
   function initOrUpdateFamilyChart(familiasData) {
     const ctx = document.getElementById('familyChart').getContext('2d');
     
-    // Destrói totalmente para não manter ordenação antiga do Canvas
     if (familyChart) {
       familyChart.destroy();
     }
 
-    // Ordenação ESTRITA decrescente por Saídas (b.exp - a.exp)
-    // Refrigerador (6.002) -> Lavadora (1.769) -> ... -> Secadora (4)
     const sortedFamilias = [...familiasData].sort((a, b) => b.exp - a.exp);
 
     const labels = sortedFamilias.map(f => f.name);
