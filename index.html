@@ -6,7 +6,7 @@
   <title>Fechamento Mensal Alhandra</title>
   <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Mono:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Plugin Chart.js Datalabels para exibir os números exatos nas pontas das barras -->
+  <!-- Plugin Chart.js Datalabels -->
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
   <style>
     :root {
@@ -484,7 +484,6 @@
 </div>
 
 <script>
-  // Registrar o plugin de datalabels
   Chart.register(ChartDataLabels);
 
   const db = {
@@ -644,7 +643,7 @@
               pointRadius: 4,
               pointHoverRadius: 7,
               pointBackgroundColor: '#06b6d4',
-              datalabels: { display: false } // Desativa números neste gráfico
+              datalabels: { display: false }
             },
             {
               label: 'Saídas (Expedição)',
@@ -657,7 +656,7 @@
               pointRadius: 4,
               pointHoverRadius: 7,
               pointBackgroundColor: '#8b5cf6',
-              datalabels: { display: false } // Desativa números neste gráfico
+              datalabels: { display: false }
             }
           ]
         },
@@ -703,9 +702,14 @@
 
   function initOrUpdateFamilyChart(familiasData) {
     const ctx = document.getElementById('familyChart').getContext('2d');
-    const labels = familiasData.map(f => f.name);
-    const recData = familiasData.map(f => f.rec);
-    const expData = familiasData.map(f => f.exp);
+    
+    // ORDENAÇÃO: DO MAIOR PARA O MENOR COM BASE NAS SAÍDAS (EXP)
+    // Como Chart.js desenha barras de baixo para cima no eixo Y, invertemos para ter o maior no topo
+    const sortedFamilias = [...familiasData].sort((a, b) => b.exp - a.exp).reverse();
+
+    const labels = sortedFamilias.map(f => f.name);
+    const recData = sortedFamilias.map(f => f.rec);
+    const expData = sortedFamilias.map(f => f.exp);
 
     if (familyChart) {
       familyChart.data.labels = labels;
@@ -739,19 +743,19 @@
           ]
         },
         options: {
-          indexAxis: 'y', // CONVERTE O GRÁFICO PARA BARRAS HORIZONTAIS
+          indexAxis: 'y',
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
             legend: {
               position: 'top',
-              align: 'end',
+              align: 'center', // CENTRALIZADO NO TOPO DO GRÁFICO
               labels: {
                 color: '#f8fafc',
                 usePointStyle: true,
                 pointStyle: 'rectRounded',
-                boxWidth: 10,
-                boxHeight: 10,
+                boxWidth: 8,
+                boxHeight: 8,
                 padding: 16,
                 font: { family: 'Google Sans Mono', size: 12, weight: '700' }
               }
@@ -763,26 +767,26 @@
               borderColor: 'rgba(255,255,255,0.1)',
               borderWidth: 1
             },
-            // CONFIGURAÇÃO DOS RÓTULOS COM VALORES NAS PONTAS DAS BARRAS
+            // CONFIGURAÇÃO DOS RÓTULOS (REMOVE OS ZEROS)
             datalabels: {
               anchor: 'end',
               align: 'right',
               color: '#f8fafc',
               font: { family: 'Google Sans Mono', size: 10, weight: '700' },
               formatter: function(value) {
-                return value > 0 ? value.toLocaleString('pt-BR') : '0';
+                return value > 0 ? value.toLocaleString('pt-BR') : ''; // OCULTA ZEROS
               }
             }
           },
           scales: {
             x: {
               ticks: { color: '#94a3b8', font: { family: 'Google Sans Mono', size: 10 } },
-              grid: { color: 'rgba(255, 255, 255, 0.03)' },
-              grace: '10%' // Adiciona margem na direita para o texto não cortar
+              grid: { display: false }, // REMOVIDA LINHA DE GRADE NO EIXO X
+              grace: '10%'
             },
             y: {
               ticks: { color: '#f8fafc', font: { family: 'Google Sans Mono', size: 11, weight: '600' } },
-              grid: { display: false }
+              grid: { display: false } // REMOVIDA LINHA DE GRADE NO EIXO Y
             }
           }
         }
