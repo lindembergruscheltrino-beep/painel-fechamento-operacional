@@ -703,13 +703,14 @@
   function initOrUpdateFamilyChart(familiasData) {
     const ctx = document.getElementById('familyChart').getContext('2d');
     
-    // Destrói a instância prévia para impedir inconsistência no eixo Y
+    // Destrói a instância anterior para aplicar a ordem do zero
     if (familyChart) {
       familyChart.destroy();
     }
 
-    // Ordenação explícita em ordem decrescente de Saídas (Maior volume primeiro)
-    const sortedFamilias = [...familiasData].sort((a, b) => b.exp - a.exp);
+    // Ordenação do menor para o maior no Array:
+    // O Chart.js renderiza o último elemento do array no TOPO do eixo Y (sem precisar do reverse no Y-scale)
+    const sortedFamilias = [...familiasData].sort((a, b) => a.exp - b.exp);
 
     const labels = sortedFamilias.map(f => f.name);
     const recData = sortedFamilias.map(f => f.rec);
@@ -782,7 +783,6 @@
             grace: '10%'
           },
           y: {
-            reverse: true, // INVERTE O EIXO Y PARA COLOCAR O PRIMEIRO ITEM DA LISTA (REFRIGERADOR) NO TOPO!
             ticks: { color: '#f8fafc', font: { family: 'Google Sans Mono', size: 11, weight: '600' } },
             grid: { display: false }
           }
