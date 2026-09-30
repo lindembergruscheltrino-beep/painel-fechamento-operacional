@@ -703,9 +703,9 @@
   function initOrUpdateFamilyChart(familiasData) {
     const ctx = document.getElementById('familyChart').getContext('2d');
     
-    // ORDENAÇÃO: DO MAIOR PARA O MENOR COM BASE NAS SAÍDAS (EXP)
-    // Como Chart.js desenha barras de baixo para cima no eixo Y, invertemos para ter o maior no topo
-    const sortedFamilias = [...familiasData].sort((a, b) => b.exp - a.exp).reverse();
+    // ORDENAÇÃO ASCENDENTE: O Chart.js desenha barras horizontais de baixo para cima.
+    // Ordenando menor -> maior, o item com maior saída (Refrigerador) fica no topo!
+    const sortedFamilias = [...familiasData].sort((a, b) => a.exp - b.exp);
 
     const labels = sortedFamilias.map(f => f.name);
     const recData = sortedFamilias.map(f => f.rec);
@@ -749,7 +749,7 @@
           plugins: {
             legend: {
               position: 'top',
-              align: 'center', // CENTRALIZADO NO TOPO DO GRÁFICO
+              align: 'center',
               labels: {
                 color: '#f8fafc',
                 usePointStyle: true,
@@ -767,26 +767,25 @@
               borderColor: 'rgba(255,255,255,0.1)',
               borderWidth: 1
             },
-            // CONFIGURAÇÃO DOS RÓTULOS (REMOVE OS ZEROS)
             datalabels: {
               anchor: 'end',
               align: 'right',
               color: '#f8fafc',
               font: { family: 'Google Sans Mono', size: 10, weight: '700' },
               formatter: function(value) {
-                return value > 0 ? value.toLocaleString('pt-BR') : ''; // OCULTA ZEROS
+                return value > 0 ? value.toLocaleString('pt-BR') : '';
               }
             }
           },
           scales: {
             x: {
               ticks: { color: '#94a3b8', font: { family: 'Google Sans Mono', size: 10 } },
-              grid: { display: false }, // REMOVIDA LINHA DE GRADE NO EIXO X
+              grid: { display: false },
               grace: '10%'
             },
             y: {
               ticks: { color: '#f8fafc', font: { family: 'Google Sans Mono', size: 11, weight: '600' } },
-              grid: { display: false } // REMOVIDA LINHA DE GRADE NO EIXO Y
+              grid: { display: false }
             }
           }
         }
