@@ -6,6 +6,8 @@
   <title>Fechamento Mensal Alhandra</title>
   <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Mono:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Plugin Chart.js Datalabels para exibir os números exatos nas pontas das barras -->
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
   <style>
     :root {
       --bg-dark: #0b0f19;
@@ -229,7 +231,7 @@
 
     .family-chart-box {
       position: relative;
-      height: 380px;
+      height: 520px;
       width: 100%;
       margin-top: 10px;
     }
@@ -468,7 +470,7 @@
 
   </div>
 
-  <!-- GRÁFICO: ANÁLISE POR FAMÍLIA -->
+  <!-- BARRAS HORIZONTAIS: ANÁLISE POR FAMÍLIA -->
   <div class="glass-card">
     <div class="section-title">
       <div class="dot" style="background: var(--accent-blue)"></div>
@@ -482,6 +484,9 @@
 </div>
 
 <script>
+  // Registrar o plugin de datalabels
+  Chart.register(ChartDataLabels);
+
   const db = {
     "09/2026": {
       recTotal: 11797, expTotal: 10734,
@@ -638,7 +643,8 @@
               tension: 0.3,
               pointRadius: 4,
               pointHoverRadius: 7,
-              pointBackgroundColor: '#06b6d4'
+              pointBackgroundColor: '#06b6d4',
+              datalabels: { display: false } // Desativa números neste gráfico
             },
             {
               label: 'Saídas (Expedição)',
@@ -650,7 +656,8 @@
               tension: 0.3,
               pointRadius: 4,
               pointHoverRadius: 7,
-              pointBackgroundColor: '#8b5cf6'
+              pointBackgroundColor: '#8b5cf6',
+              datalabels: { display: false } // Desativa números neste gráfico
             }
           ]
         },
@@ -697,84 +704,84 @@
   function initOrUpdateFamilyChart(familiasData) {
     const ctx = document.getElementById('familyChart').getContext('2d');
     const labels = familiasData.map(f => f.name);
-    const expData = familiasData.map(f => f.exp);
     const recData = familiasData.map(f => f.rec);
-
-    const gradPurple = ctx.createLinearGradient(0, 0, 0, 350);
-    gradPurple.addColorStop(0, 'rgba(139, 92, 246, 0.25)');
-    gradPurple.addColorStop(1, 'rgba(139, 92, 246, 0.0)');
+    const expData = familiasData.map(f => f.exp);
 
     if (familyChart) {
       familyChart.data.labels = labels;
-      familyChart.data.datasets[0].data = expData;
-      familyChart.data.datasets[1].data = recData;
+      familyChart.data.datasets[0].data = recData;
+      familyChart.data.datasets[1].data = expData;
       familyChart.update();
     } else {
       familyChart = new Chart(ctx, {
-        type: 'line',
+        type: 'bar',
         data: {
           labels: labels,
           datasets: [
             {
-              label: 'Saídas',
-              data: expData,
-              borderColor: '#8b5cf6',
-              backgroundColor: gradPurple,
-              borderWidth: 3,
-              fill: true,
-              tension: 0.35,
-              pointRadius: 3.5,
-              pointHoverRadius: 6,
-              pointBackgroundColor: '#8b5cf6'
-            },
-            {
               label: 'Entradas',
               data: recData,
-              borderColor: '#06b6d4',
-              backgroundColor: 'transparent',
-              borderWidth: 3,
-              fill: false,
-              tension: 0.35,
-              pointRadius: 3.5,
-              pointHoverRadius: 6,
-              pointBackgroundColor: '#06b6d4'
+              backgroundColor: '#06b6d4',
+              borderRadius: 6,
+              borderSkipped: false,
+              barPercentage: 0.7,
+              categoryPercentage: 0.8
+            },
+            {
+              label: 'Saídas',
+              data: expData,
+              backgroundColor: '#8b5cf6',
+              borderRadius: 6,
+              borderSkipped: false,
+              barPercentage: 0.7,
+              categoryPercentage: 0.8
             }
           ]
         },
         options: {
+          indexAxis: 'y', // CONVERTE O GRÁFICO PARA BARRAS HORIZONTAIS
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
             legend: {
               position: 'top',
-              align: 'center',
+              align: 'end',
               labels: {
                 color: '#f8fafc',
                 usePointStyle: true,
-                pointStyle: 'circle',
-                boxWidth: 8,
-                boxHeight: 8,
+                pointStyle: 'rectRounded',
+                boxWidth: 10,
+                boxHeight: 10,
                 padding: 16,
                 font: { family: 'Google Sans Mono', size: 12, weight: '700' }
               }
             },
             tooltip: {
-              mode: 'index',
-              intersect: false,
               backgroundColor: '#172033',
               titleColor: '#f8fafc',
               bodyColor: '#94a3b8',
               borderColor: 'rgba(255,255,255,0.1)',
               borderWidth: 1
+            },
+            // CONFIGURAÇÃO DOS RÓTULOS COM VALORES NAS PONTAS DAS BARRAS
+            datalabels: {
+              anchor: 'end',
+              align: 'right',
+              color: '#f8fafc',
+              font: { family: 'Google Sans Mono', size: 10, weight: '700' },
+              formatter: function(value) {
+                return value > 0 ? value.toLocaleString('pt-BR') : '0';
+              }
             }
           },
           scales: {
             x: {
-              ticks: { color: '#94a3b8', font: { family: 'Google Sans Mono', size: 10 }, maxRotation: 25 },
-              grid: { display: false }
+              ticks: { color: '#94a3b8', font: { family: 'Google Sans Mono', size: 10 } },
+              grid: { color: 'rgba(255, 255, 255, 0.03)' },
+              grace: '10%' // Adiciona margem na direita para o texto não cortar
             },
             y: {
-              ticks: { color: '#94a3b8', font: { family: 'Google Sans Mono', size: 11 } },
+              ticks: { color: '#f8fafc', font: { family: 'Google Sans Mono', size: 11, weight: '600' } },
               grid: { display: false }
             }
           }
